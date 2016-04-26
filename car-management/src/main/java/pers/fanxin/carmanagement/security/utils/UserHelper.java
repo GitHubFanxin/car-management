@@ -74,7 +74,10 @@ public class UserHelper {
 		while(roleIterator.hasNext()){
 			Iterator<Permission> permissionIterator = roleIterator.next().getPermissions().iterator();
 			while(permissionIterator.hasNext()){
-				permissions.add(permissionIterator.next().getPermission());
+				Permission permission = permissionIterator.next();
+				if(permission.getAvailable()){
+					permissions.add(permission.getPermission());
+				}
 			}
 		}
 		return permissions;
