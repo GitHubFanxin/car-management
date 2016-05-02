@@ -1,5 +1,7 @@
 package pers.fanxin.carmanagement.security.service;
 
+import java.util.List;
+
 import pers.fanxin.carmanagement.security.entity.User;
 
 public interface UserService {
@@ -49,4 +51,10 @@ public interface UserService {
 	 * @date 2016年4月21日
 	 */
 	void updateUser(User user);
+	
+	List<User> getAllUsers();
+	
+	List<User> findUserByPage(int offset, int pageSize, String condition);
+	
+	long findCount(String condition);
 }

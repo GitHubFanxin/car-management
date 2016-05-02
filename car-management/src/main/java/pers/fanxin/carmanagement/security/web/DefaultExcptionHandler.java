@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class DefaultExcptionHandler {
-	@ExceptionHandler({UnauthorizedException.class})
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ModelAndView processUnauthenticatedException(NativeWebRequest request, UnauthorizedException e) {
-        ModelAndView mv = new ModelAndView();
-        mv.addObject("exception", e);
-        mv.setViewName("unauthorized");
-        return mv;
-    }
+//	@ExceptionHandler({UnauthorizedException.class})
+//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+//    public ModelAndView processUnauthenticatedException(NativeWebRequest request, UnauthorizedException e) {
+//        ModelAndView mv = new ModelAndView();
+//        mv.addObject("exception", e);
+//        mv.setViewName("unauthorized");
+//        return mv;
+//    }
 }

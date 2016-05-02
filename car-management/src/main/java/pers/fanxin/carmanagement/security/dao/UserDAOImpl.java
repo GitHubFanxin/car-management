@@ -60,4 +60,32 @@ public class UserDAOImpl extends BaseHibernateDAO<User> implements UserDAO{
 		return null;
 	}
 
+	@Override
+	public List<User> findUserByPage(int offset, int pageSize, String condition) {
+		String hql;
+		if(condition==""||condition==null){
+			hql = "from "+User.class.getSimpleName();
+			return findByPage(hql, offset, pageSize);
+		}else{
+			hql = "from "+User.class.getSimpleName()+" where username like ? or department like ?";
+			return findByPage(hql, offset, pageSize, "%"+condition+"%","%"+condition+"%");
+		}
+	}
+
+	@Override
+	public long findCount(String condition) {
+		String hql;
+		List<?> l ;
+		if(condition==""||condition==null){
+			hql = "select count(*) from "+User.class.getSimpleName();
+			l = find(hql);
+		}else{
+			hql = "select count(*) from "+User.class.getSimpleName()+" where username like ? or department like ?";
+			l = find(hql,"%"+condition+"%","%"+condition+"%");
+		}
+		if(l!=null&&l.size()==1){
+			return (Long)l.get(0);
+		}
+		return 0;
+	}
 }

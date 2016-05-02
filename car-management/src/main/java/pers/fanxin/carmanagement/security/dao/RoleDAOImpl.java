@@ -47,4 +47,33 @@ public class RoleDAOImpl extends BaseHibernateDAO<Role> implements RoleDAO{
 	public void deleteRole(Role role) {
 		this.deleteRole(role.getRoleId());
 	}
+
+	@Override
+	public List<Role> findRoleByPage(int offset, int pageSize, String condition) {
+		String hql;
+		if(condition==null||condition==""){
+			hql = "from "+Role.class.getSimpleName();
+			return findByPage(hql, offset, pageSize);
+		}else{
+			hql = "from "+Role.class.getSimpleName()+" where roleName like ?";
+			return findByPage(hql, offset, pageSize, "%"+condition+"%");
+		}
+	}
+
+	@Override
+	public long findCount(String condition) {
+		String hql;
+		List<?> l ;
+		if(condition==null||condition==""){
+			hql = "select count(*) from "+Role.class.getSimpleName();
+			l = find(hql);
+		}else{
+			hql = "select count(*) from "+Role.class.getSimpleName()+" where roleName like ?";
+			l = find(hql,"%"+condition+"%");
+		}
+		if(l!=null&&l.size()==1){
+			return (Long)l.get(0);
+		}
+		return 0;
+	}
 }

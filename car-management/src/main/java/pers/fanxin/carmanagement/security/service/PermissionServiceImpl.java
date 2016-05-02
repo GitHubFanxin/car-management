@@ -1,10 +1,12 @@
 package pers.fanxin.carmanagement.security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import pers.fanxin.carmanagement.security.dao.PermissionDAO;
 import pers.fanxin.carmanagement.security.entity.Permission;
 
+@Service
 public class PermissionServiceImpl implements PermissionService{
 	
 	@Autowired

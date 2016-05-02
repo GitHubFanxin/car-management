@@ -1,5 +1,7 @@
 package pers.fanxin.carmanagement.security.service;
 
+import java.util.List;
+
 import pers.fanxin.carmanagement.security.entity.Role;
 
 public interface RoleService {
@@ -35,5 +37,9 @@ public interface RoleService {
 	 * @date 2016年4月21日
 	 */
 	public void updateRole(Role role);
+	
+	public List<Role> findRoleByPage(int offset, int pageSize, String condition);
+	
+	public long findCount(String condition);
 
 }

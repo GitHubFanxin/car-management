@@ -162,6 +162,18 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>4.3.8.Final</version>
 		</dependency>
+		
+		<dependency>  
+    <groupId>org.codehaus.jackson</groupId>  
+    <artifactId>jackson-core-asl</artifactId>  
+    <version>1.8.4</version>  
+</dependency>  
+<dependency>  
+    <groupId>org.codehaus.jackson</groupId>  
+    <artifactId>jackson-mapper-asl</artifactId>  
+    <version>1.8.4</version>  
+</dependency>  
+
 	</dependencies>
 
 	<build>

@@ -1,5 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -120,14 +124,14 @@
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
-				<li class="active">用户管理</li>
+				<li class="active">角色管理</li>
 			</ol>
 		</div>
 		<!--/.row-->
 
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">用户管理</h1>
+				<h1 class="page-header">角色管理</h1>
 			</div>
 		</div>
 		<!--/.row-->
@@ -136,7 +140,7 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">用户列表</div>
+					<div class="panel-heading">角色列表</div>
 					<div class="panel-body">
 						<div id="toolbar">
 							<button id="bt_add" class="btn btn-default" data-toggle="modal"
@@ -169,33 +173,13 @@
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<input type="text" class="form-control" id="username"
-							placeholder="用户名">
-					</div>
-					<div class="form-group" id="password_div">
-						<input type="password" class="form-control" id="password"
-							placeholder="密码">
+						<input type="text" class="form-control" id="roleName"
+							placeholder="角色名">
 					</div>
 					<div class="form-group">
-						<input type="text" class="form-control" id="realname"
-							placeholder="姓名">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="department"
+						<input type="text" class="form-control" id="description"
 							placeholder="部门">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="email"
-							placeholder="邮件">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="phone"
-							placeholder="电话">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="role"
-							placeholder="用户角色">
-					</div>
+					</div>					
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -228,27 +212,18 @@
 				search:true,
 				clickToSelect:true,
 				toolbar:"#toolbar",
-				url: 'userlist',
+				url: 'rolelist',
 				sidePagination: 'server',
 				columns: [{
 				checkbox:true
 				},{ 
-				field: "username",
-				title: "姓名",
+				field: "roleName",
+				title: "角色名",
 				sortable: true,
 				},
 				{ 
-				field: "department",
-				title: "部门"
-				},{ 
-				field: "email",
-				title: "邮件"
-				},{ 
-				field: "phone",
-				title: "电话"
-				},{ 
-				field: "role",
-				title: "用户角色"
+				field: "description",
+				title: "角色描述"
 				}]
 			});
 
@@ -263,7 +238,7 @@
 			$("#bt_edit").click(edit);
 			$("#save").click(save);			
 		});
-		var url="useradd";
+		var url="roleadd";
 
 $.postJSON = function(url,jsondata,callback){//JSON请求
 		return jQuery.ajax({
@@ -278,10 +253,8 @@ $.postJSON = function(url,jsondata,callback){//JSON请求
 
 function save() {
         var dataJson = {
-            "username": $("#username").val(),
-            "department": $("#department").val(),
-            "email": $("#email").val(),
-            "phone": $("#phone").val()
+            "roleName": $("#roleName").val(),
+            "description": $("#description").val(),
         };
         $.postJSON(url,dataJson,function(result){
 			table.ajax.reload();
@@ -290,27 +263,19 @@ function save() {
     }
 	
 	function add(){
-		url="useradd";
-		$("#password_div").show();
+		url="role_add";
 		$("#myModalLabel").text("新增");
-		$("#username").val("");
-		$("#department").val("");
-		$("#email").val("");
-		$("#phone").val("");
-		$("#role").val("");
+		$("#roleName").val("");
+		$("#description").val("");
 	}
 	
 	function edit(){
 		$("#myModalLabel").text("编辑");
-		$("#password_div").hide();
-		url="edit";
+		url="role_edit";
 		var rowData = $('#table').bootstrapTable('getSelections');
 		var s = rowData[0].username;
-		$("#username").val(rowData[0].username);
-		$("#department").val(rowData[0].department);
-		$("#email").val(rowData[0].email);
-		$("#phone").val(rowData[0].phone);
-		$("#role").val(rowData[0].role);
+		$("#roleName").val(rowData[0].roleName);
+		$("#description").val(rowData[0].description);
 	}
 						    function rowStyle(row, index) {
 						        var classes = ['active', 'success', 'info', 'warning', 'danger'];

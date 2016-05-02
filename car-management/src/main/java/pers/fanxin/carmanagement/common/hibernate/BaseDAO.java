@@ -57,4 +57,5 @@ public interface BaseDAO<T> {
 	 */
 	List<T> findAll(Class<T> entityClazz);
 	List<T> find(String hql);
+	long findCount(Class<T> entityClazz);
 }

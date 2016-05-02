@@ -4,9 +4,7 @@
         <wb-resource deploy-path="/" source-path="/target/m2e-jee/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resource"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resource"/>
         <property name="context-root" value="car-management"/>
         <property name="java-output-path" value="/car-management/target/classes"/>
     </wb-module>

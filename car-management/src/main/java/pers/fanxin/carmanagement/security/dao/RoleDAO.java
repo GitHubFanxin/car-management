@@ -1,5 +1,7 @@
 package pers.fanxin.carmanagement.security.dao;
 
+import java.util.List;
+
 import pers.fanxin.carmanagement.common.hibernate.BaseDAO;
 import pers.fanxin.carmanagement.security.entity.Role;
 
@@ -57,5 +59,9 @@ public interface RoleDAO extends BaseDAO<Role>{
 	 * @date 2016年4月20日
 	 */
 	public Role getRoleById(Long id);
+	
+	public List<Role> findRoleByPage(int offset, int pageSize, String condition);
+	
+	long findCount(String condition);
 
 }

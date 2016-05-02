@@ -1,6 +1,7 @@
 package pers.fanxin.carmanagement.security.service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +52,22 @@ public class UserServiceImpl implements UserService{
 	public void updateUser(User user) {
 		this.updateUser(user);
 	}
+
+	@Override
+	public List<User> getAllUsers() {
+		return userDAO.findAll(User.class);
+	}
+
+	@Override
+	public List<User> findUserByPage(int offset, int pageSize, String condition) {
+		return userDAO.findUserByPage(offset, pageSize, condition);
+	}
+
+	@Override
+	public long findCount(String condition) {
+		return userDAO.findCount(condition);
+	}
+	
+
 	
 }

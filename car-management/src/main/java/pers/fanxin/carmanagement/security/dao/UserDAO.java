@@ -1,5 +1,7 @@
 package pers.fanxin.carmanagement.security.dao;
 
+import java.util.List;
+
 import pers.fanxin.carmanagement.common.hibernate.BaseDAO;
 import pers.fanxin.carmanagement.security.entity.User;
 
@@ -70,4 +72,8 @@ public interface UserDAO extends BaseDAO<User>{
 	 * @date 2016年4月21日
 	 */
 	User getUserById(Long id);
+	
+	List<User> findUserByPage(int offset, int pageSize, String condition);
+	
+	long findCount(String condition);
 }

@@ -59,5 +59,23 @@ public class BaseHibernateDAO<T> implements BaseDAO<T> {
 	public List<T> find(String hql) {
 		return getSessionFactory().getCurrentSession().createQuery(hql).list();
 	}
+
+	@Override
+	public long findCount(Class<T> entityClazz) {
+		List<?> l = find("select count(*) from "+entityClazz.getSimpleName());
+		if(l!=null&&l.size()==1){
+			return (Long)l.get(0);
+		}
+		return 0;
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected List<T> findByPage(String hql,int offset,int pageSize,Object... params){
+		Query query = getSessionFactory().getCurrentSession().createQuery(hql);
+		for(int i=0;i<params.length;i++){
+			query.setParameter(i, params[i]);
+		}
+		return query.setFirstResult(offset).setMaxResults(pageSize).list();
+	}
 	
 }

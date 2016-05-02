@@ -20,7 +20,7 @@ public class UserHelper {
 		Iterator<Role> iterator = user.getRole().iterator();
 		while(iterator.hasNext()){
 			roles.append(iterator.next().getRoleName());
-			if(iterator.hasNext())roles.append(",");
+			if(iterator.hasNext())roles.append(", ");
 		}
 		return roles.toString();
 	}
