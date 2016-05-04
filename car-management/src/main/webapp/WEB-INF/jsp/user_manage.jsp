@@ -203,11 +203,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<div class="form-group">
 						<input type="text" class="form-control" id="phone"
 							placeholder="电话">
-					</div>
+					</div>						
 					<div class="form-group">
-						<input type="text" class="form-control" id="role"
-							placeholder="用户角色">
+						<div id="role-tree" class=""></div>
 					</div>
+					
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -246,6 +246,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	<script src="<%=basePath%>static/js/bootstrap-datepicker.js"></script>
 	<script src="<%=basePath%>static/js/bootstrap-table.js"></script>
+	<script src="<%=basePath%>static/js/bootstrap-treeview.min.js"></script>
 	<script src="<%=basePath%>static/js/custom.js"></script>
 	<script>
 	
@@ -298,9 +299,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 			$('#table').on('check.bs.table',function(row,e){
 				$("#bt_edit").attr("disabled",false);
+				$("#bt_delete").attr("disabled",false);
 			});
 			$('#table').on('uncheck.bs.table',function(row,e){
 				$("#bt_edit").attr("disabled",true);
+				$("#bt_delete").attr("disabled",true);
 			});
 			
 			$("#bt_add").click(add);
@@ -328,18 +331,29 @@ $.postJSON = function(url,jsondata,callback){//JSON请求
 
 function save() {
 	var saveUrl;
+	var selected = $("#role-tree").treeview('getChecked');
+	var roles = "";
+	for(var i=0;i<selected.length;i++){
+		if(i>0){
+			roles = roles+","+selected[i].text;
+		}else{
+			roles = selected[i].text;
+		}
+	}
+	
 	if(isEdit){
 		saveUrl="edit";
 		var rowData = $('#table').bootstrapTable('getSelections');
 		var dataJson = {
-				"userId":rowData.userId,
+				"userId":rowData[0].userId,
 				"username": $("#username").val(),
 				"realname":$("#realname").val(),
 				"workNum":$("#workNum").val(),
 				"payNum":$("#payNum").val(),
 	            "department": $("#department").val(),
 	            "email": $("#email").val(),
-	            "phone": $("#phone").val()
+	            "phone": $("#phone").val(),
+	            "roles":roles
 	        };
 	}else{
 		saveUrl="add";
@@ -351,12 +365,15 @@ function save() {
 				"payNum":$("#payNum").val(),
 	            "department": $("#department").val(),
 	            "email": $("#email").val(),
-	            "phone": $("#phone").val()
+	            "phone": $("#phone").val(),
+	            "roles":roles
 	        };
 	}
      $.postJSON(saveUrl,dataJson,function(result){
     	 $('#table').bootstrapTable('refresh');
 		$("#myModal").modal("hide");
+		$("#bt_edit").attr("disabled",true);
+		$("#bt_delete").attr("disabled",true);
 	});
  }
 	
@@ -373,17 +390,20 @@ function save() {
 		$("#email").val("");
 		$("#phone").val("");
 		$("#role").val("");
+		treeinit(-1);
 	}
 	
 	function deleteuser(){
 		var url="delete";
 		var rowData = $('#table').bootstrapTable('getSelections');
 		var dataJson = {
-	            "userId": rowData[0].roleId,
+	            "userId": rowData[0].userId,
 	        };
 	        $.postJSON(url,dataJson,function(result){
 	        	$('#table').bootstrapTable('refresh');
 				$("#delete_modal").modal("hide");
+				$("#bt_edit").attr("disabled",true);
+				$("#bt_delete").attr("disabled",true);
 			});
 	}
 	
@@ -392,6 +412,7 @@ function save() {
 		$("#password_div").hide();
 		isEdit=true;
 		var rowData = $('#table').bootstrapTable('getSelections');
+		treeinit(rowData[0].userId);
 		$("#username").val(rowData[0].username);
 		$("#realname").val(rowData[0].realname);
 		$("#workNum").val(rowData[0].workNum);
@@ -401,6 +422,24 @@ function save() {
 		$("#phone").val(rowData[0].phone);
 		$("#role").val(rowData[0].role);
 	}
+	
+	function treeinit(userId){
+		var url = "roletree"
+		var dataJson = {
+	            "userId": userId,
+	     };
+		$.postJSON(url,dataJson,function(result){
+			$("#role-tree").treeview({
+				data:result,
+				showIcon:false,
+				showCheckbox:true
+			});
+		});
+		
+	}
+	
+	
+	
 						    function rowStyle(row, index) {
 						        var classes = ['success', 'info', 'warning', 'danger'];
 						

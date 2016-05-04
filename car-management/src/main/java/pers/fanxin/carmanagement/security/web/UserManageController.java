@@ -2,8 +2,11 @@ package pers.fanxin.carmanagement.security.web;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,8 +21,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import pers.fanxin.carmanagement.common.utils.Page;
 import pers.fanxin.carmanagement.security.entity.Role;
 import pers.fanxin.carmanagement.security.entity.User;
+import pers.fanxin.carmanagement.security.service.RoleService;
 import pers.fanxin.carmanagement.security.service.UserService;
 import pers.fanxin.carmanagement.security.utils.UserHelper;
+import pers.fanxin.carmanagement.security.vo.UserVO;
 
 
 @Controller
@@ -28,6 +33,8 @@ import pers.fanxin.carmanagement.security.utils.UserHelper;
 public class UserManageController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private RoleService roleService;
 	
 	@RequestMapping("/page")
 	public String roleManage(){
@@ -60,23 +67,51 @@ public class UserManageController {
 	
 	@RequestMapping("/add")
 	@ResponseBody
-	public Object userAdd(HttpServletRequest request,@RequestBody User user){
-		User users = user;
-		userService.createUser(user);
+	public Object userAdd(HttpServletRequest request,@RequestBody UserVO userVO){
+		userService.createUser(userVO);
 		return "fail";
 	}
 	
 	@RequestMapping("/edit")
 	@ResponseBody
-	public Object roleEdit(@RequestBody User user){
-		userService.updateUser(user);
+	public Object roleEdit(@RequestBody UserVO userVO){
+		userService.updateUser(userVO);
 		return "{'state':true}";
 	}
 	
 	@RequestMapping("/delete")
 	@ResponseBody
-	public Object roleDelete(@RequestBody User user){
-		userService.deleteUser(user.getUserId());
+	public Object roleDelete(@RequestBody UserVO userVO){
+		userService.deleteUser(userVO.getUserId());
 		return "{'state':true}";
+	}
+	
+	@RequestMapping("/roletree")
+	@ResponseBody
+	public Object roleTree(@RequestBody UserVO userVO){
+		Set<Role> curRoles;
+		if(userVO.getUserId()>0){
+			curRoles = userService.findUserById(userVO.getUserId()).getRole();
+		}else{
+			curRoles = new HashSet<Role>();
+		}
+		List<Role> allRoles = roleService.getAllRoles();
+		List<Object> nodes = new ArrayList<Object>();
+		List<Object> tree = new ArrayList<Object>();
+		Map<String,Object> root = new HashMap<String,Object>();
+		Map<String,Boolean> checked = new HashMap<String,Boolean>();
+		checked.put("checked", true);
+		for (Role role : allRoles){
+			Map<String,Object> node = new HashMap<String,Object>();
+			node.put("text", role.getRoleName());
+			if(curRoles.contains(role)){
+				node.put("state", checked);
+			}
+			nodes.add(node);
+		}
+		root.put("text", "权限树");
+		root.put("nodes", nodes);
+		tree.add(root);
+		return tree;
 	}
 }

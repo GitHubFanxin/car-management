@@ -27,7 +27,10 @@ public class BaseHibernateDAO<T> implements BaseDAO<T> {
 
 	@Override
 	public Serializable save(T entity) {
-		return getSessionFactory().getCurrentSession().save(entity);
+		Long id = (Long) getSessionFactory().getCurrentSession().save(entity);
+		getSessionFactory().getCurrentSession().flush();
+		getSessionFactory().getCurrentSession().clear();
+		return id;
 	}
 
 	@Override

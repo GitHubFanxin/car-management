@@ -74,4 +74,14 @@ public class RoleDAOImpl extends BaseHibernateDAO<Role> implements RoleDAO{
 		}
 		return 0;
 	}
+
+	@Override
+	public Role getRoleByName(String roleName) {
+		String hql = "from "+Role.class.getSimpleName()+" where roleName=?";
+		List<Role> roles = this.find(hql, roleName);
+		if(!roles.isEmpty()){
+			return roles.get(0);
+		}
+		return null;
+	}
 }

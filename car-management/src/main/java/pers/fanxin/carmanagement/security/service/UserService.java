@@ -3,6 +3,7 @@ package pers.fanxin.carmanagement.security.service;
 import java.util.List;
 
 import pers.fanxin.carmanagement.security.entity.User;
+import pers.fanxin.carmanagement.security.vo.UserVO;
 
 public interface UserService {
 	/**
@@ -31,6 +32,8 @@ public interface UserService {
 	 */
 	Long createUser(String username, String realname, String workNum, 
 			String payNum, String email, String password, String roleId);
+	
+	Long createUser(UserVO userVO);
 	/**
 	 * 
 	 * @Description: 根据用户名查找用户
@@ -42,6 +45,8 @@ public interface UserService {
 	 * @date 2016年4月21日
 	 */
 	User findUserByName(String username);
+	
+	User findUserById(Long id);
 	/**
 	 * 
 	 * @Description: 更新用户
@@ -51,7 +56,7 @@ public interface UserService {
 	 * @author fanxin
 	 * @date 2016年4月21日
 	 */
-	void updateUser(User user);
+	void updateUser(UserVO userVO);
 	
 	List<User> getAllUsers();
 	

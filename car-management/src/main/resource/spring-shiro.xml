@@ -82,7 +82,7 @@ http://www.springframework.org/schema/util/spring-util-4.0.xsd">
         <property name="usernameParam" value="username"/>
         <property name="passwordParam" value="password"/>
         <property name="loginUrl" value="/login.jsp"/>
-        <property name="successUrl" value="/index"/>
+        <property name="successUrl" value="/home"/>
     </bean>
     
     <bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">
@@ -102,7 +102,6 @@ http://www.springframework.org/schema/util/spring-util-4.0.xsd">
         </property>
         <property name="filterChainDefinitions">
             <value>
-                
                 /unauthorized.jsp = anon
                 /static/** = anon
                 /login.jsp = authc

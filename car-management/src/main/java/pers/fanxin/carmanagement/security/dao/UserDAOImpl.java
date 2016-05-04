@@ -18,9 +18,6 @@ public class UserDAOImpl extends BaseHibernateDAO<User> implements UserDAO{
 		users = this.find("from "+User.class.getSimpleName()+" where username=?", username);
 		if(!users.isEmpty()){
 			return users.get(0); 
-			//test
-//			User user = users.get(0);
-//			System.out.println(UserHelper.getUserRole(user));
 		}
 		return null;
 	}
@@ -35,7 +32,7 @@ public class UserDAOImpl extends BaseHibernateDAO<User> implements UserDAO{
 		SQLQuery query = this.getSessionFactory().getCurrentSession().createSQLQuery("delete from user_role where user_id=?");
 		query.setParameter(0, id);
 		query.executeUpdate();
-		query = this.getSessionFactory().getCurrentSession().createSQLQuery("delete from user where user_id=?");
+		query = this.getSessionFactory().getCurrentSession().createSQLQuery("delete from t_user where user_id=?");
 		query.setParameter(0, id);
 		query.executeUpdate();
 	}

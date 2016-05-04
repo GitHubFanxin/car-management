@@ -6,21 +6,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class SecurityController {
+public class HomeController {
 	@RequestMapping("/index")
     public String hello1() {
         SecurityUtils.getSubject().checkRole("admin");
         return "index";
     }
-
-    @RequiresRoles("admin")
-    @RequestMapping("/hello2")
-    public String hello2() {
-        return "success";
-    }
-    
-//    @RequestMapping("/logoutSuccess")
-//    public String logout() {
-//    	return "logoutSuccess";
-//    }
+	
+	@RequestMapping("/home")
+	public String home() {
+        return "home";
+    }    
 }

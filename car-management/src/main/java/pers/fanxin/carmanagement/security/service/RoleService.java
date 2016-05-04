@@ -45,4 +45,5 @@ public interface RoleService {
 	
 	public long findCount(String condition);
 
+	public List<Role> getAllRoles();
 }

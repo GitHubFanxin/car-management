@@ -299,6 +299,8 @@ function save() {
         $.postJSON(saveUrl,dataJson,function(result){
         	$('#table').bootstrapTable('refresh');
 			$("#myModal").modal("hide");
+			$("#bt_edit").attr("disabled",true);
+			$("#bt_delete").attr("disabled",true);
 		});
     }
 	
@@ -318,6 +320,8 @@ function save() {
 	        $.postJSON(url,dataJson,function(result){
 	        	$('#table').bootstrapTable('refresh');
 				$("#delete_modal").modal("hide");
+				$("#bt_edit").attr("disabled",true);
+				$("#bt_delete").attr("disabled",true);
 			});
 	}
 	

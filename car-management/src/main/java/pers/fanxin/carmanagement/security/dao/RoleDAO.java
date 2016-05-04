@@ -60,6 +60,8 @@ public interface RoleDAO extends BaseDAO<Role>{
 	 */
 	public Role getRoleById(Long id);
 	
+	public Role getRoleByName(String roleName);
+	
 	public List<Role> findRoleByPage(int offset, int pageSize, String condition);
 	
 	long findCount(String condition);

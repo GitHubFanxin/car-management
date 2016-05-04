@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,7 @@ public class RoleManageController {
 	@RequiresRoles("admin")
 	@RequestMapping("/page")
 	public String roleManage(){
+		SecurityUtils.getSubject().checkRole("admin");
 		return "role_manage";
 	}
 	

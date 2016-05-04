@@ -47,4 +47,9 @@ public class RoleServiceImpl implements RoleService{
 		return roleDAO.createRole(role);
 	}
 
+	@Override
+	public List<Role> getAllRoles() {
+		return roleDAO.findAll(Role.class);
+	}
+
 }

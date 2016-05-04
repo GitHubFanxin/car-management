@@ -12,6 +12,7 @@ import pers.fanxin.carmanagement.security.dao.UserDAO;
 import pers.fanxin.carmanagement.security.entity.Role;
 import pers.fanxin.carmanagement.security.entity.User;
 import pers.fanxin.carmanagement.security.utils.EncryptHelper;
+import pers.fanxin.carmanagement.security.vo.UserVO;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -43,7 +44,6 @@ public class UserServiceImpl implements UserService{
 			roles.add(role);
 		}
 		user.setRole(roles);
-		EncryptHelper.encryptPassword(user);
 		return createUser(user);
 	}
 
@@ -53,8 +53,23 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public void updateUser(User user) {
-		this.updateUser(user);
+	public void updateUser(UserVO userVO) {
+		User user = userDAO.getUserById(userVO.getUserId());
+		user.setUsername(userVO.getUsername());
+		user.setRealname(userVO.getRealname());
+		user.setWorkNum(userVO.getWorkNum());
+		user.setDepartment(userVO.getDepartment());
+		user.setPhone(userVO.getPhone());
+		user.setPayNum(userVO.getPayNum());
+		user.setEmail(userVO.getEmail());
+		String[] roleNames = userVO.getRoles().split(",");
+		Set<Role> roles = new HashSet<Role>();
+		for(String roleName : roleNames){
+			Role role = roleDAO.getRoleByName(roleName);
+			roles.add(role);
+		}
+		user.setRole(roles);
+		userDAO.updateUser(user);
 	}
 
 	@Override
@@ -75,6 +90,32 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void deleteUser(long id) {
 		userDAO.deleteUser(id);
+	}
+
+	@Override
+	public User findUserById(Long id) {
+		return userDAO.getUserById(id);
+	}
+
+	@Override
+	public Long createUser(UserVO userVO) {
+		User user = new User();
+		user.setUsername(userVO.getUsername());
+		user.setRealname(userVO.getRealname());
+		user.setWorkNum(userVO.getWorkNum());
+		user.setDepartment(userVO.getDepartment());
+		user.setPhone(userVO.getPhone());
+		user.setPayNum(userVO.getPayNum());
+		user.setEmail(userVO.getEmail());
+		user.setPassword(userVO.getPassword());
+		String[] roleNames = userVO.getRoles().split(",");
+		Set<Role> roles = new HashSet<Role>();
+		for(String roleName : roleNames){
+			Role role = roleDAO.getRoleByName(roleName);
+			roles.add(role);
+		}
+		user.setRole(roles);
+		return createUser(user);
 	}
 	
 
