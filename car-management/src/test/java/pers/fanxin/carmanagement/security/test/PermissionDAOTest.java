@@ -15,7 +15,7 @@ import pers.fanxin.carmanagement.security.dao.PermissionDAO;
 import pers.fanxin.carmanagement.security.entity.Permission;
 
 public class PermissionDAOTest {
-	ApplicationContext context = new FileSystemXmlApplicationContext("src/main/resource/*.xml");
+	ApplicationContext context = new FileSystemXmlApplicationContext("src/main/resource/test-*.xml");
 	PermissionDAO permissionDAO;
 
 	@Before
@@ -23,16 +23,16 @@ public class PermissionDAOTest {
 		permissionDAO = (PermissionDAO)context.getBean("permissionDAOImpl");
 	}
 
-//	@Test
+	@Test
 	public void creatPermissionTest() {
 		Permission p = new Permission();
-		p.setPermission("user:add");
-		p.setDescription("添加用户");
+		p.setPermission("system:*");
+		p.setDescription("系统管理");
 		p.setAvailable(Boolean.TRUE);
 		Long id = permissionDAO.createPermission(p);
 		System.out.println( id.toString());
 	}
-	@Test
+//	@Test
 	public void getAllPermissionTest(){
 		List<Permission> permissions = permissionDAO.getAllPermissions();
 		Assert.assertEquals(2, permissions.size());

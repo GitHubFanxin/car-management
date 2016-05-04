@@ -38,6 +38,9 @@ public class BaseHibernateDAO<T> implements BaseDAO<T> {
 	@Override
 	public void update(T entity) {
 		getSessionFactory().getCurrentSession().saveOrUpdate(entity);
+		getSessionFactory().getCurrentSession().flush();
+		getSessionFactory().getCurrentSession().clear();
+//		getSessionFactory().getCurrentSession().update(entity);
 	}
 	@SuppressWarnings("unchecked")
 	@Override

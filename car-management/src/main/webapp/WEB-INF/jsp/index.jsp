@@ -1,5 +1,10 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,11 +12,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>公车管理平台 - Tables</title>
 
-<link href="static/css/bootstrap.min.css" rel="stylesheet">
+<link href="<%=basePath%>static/css/bootstrap.min.css" rel="stylesheet">
 
-<link href="static/css/bootstrap-table.css" rel="stylesheet">
-<link href="static/css/styles.css" rel="stylesheet">
-<link href="static/css/custom.css" rel="stylesheet">
+<link href="<%=basePath%>static/css/bootstrap-table.css" rel="stylesheet">
+<link href="<%=basePath%>static/css/styles.css" rel="stylesheet">
+<link href="<%=basePath%>static/css/custom.css" rel="stylesheet">
 
 <!--[if lt IE 9]>
 <script src="static/js/html5shiv.js"></script>
@@ -66,14 +71,11 @@
 						class="glyphicon glyphicon-s glyphicon-plus"></em></span>
 			</a>
 				<ul class="children collapse" id="sub-item-1">
-					<li><a class="" href="index"> <span
+					<li><a class="" href="<%=basePath %>manage/user/page"> <span
 							class="glyphicon glyphicon-share-alt"></span> 用户管理
 					</a></li>
-					<li><a class="" href="role_manage"> <span
+					<li><a class="" href="<%=basePath %>manage/role/page"> <span
 							class="glyphicon glyphicon-share-alt"></span> 角色管理
-					</a></li>
-					<li><a class="" href="#"> <span
-							class="glyphicon glyphicon-share-alt"></span> 车辆管理
 					</a></li>
 				</ul></li>
 			<li class="parent"><a data-toggle="collapse" href="#sub-item-2">
@@ -120,209 +122,29 @@
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
-				<li class="active">用户管理</li>
+				<li class="active"> 主面板</li>
 			</ol>
 		</div>
 		<!--/.row-->
 
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">用户管理</h1>
+				<h1 class="page-header"> 主面板</h1>
 			</div>
 		</div>
 		<!--/.row-->
 
-
-		<div class="row">
-			<div class="col-lg-12">
-				<div class="panel panel-default">
-					<div class="panel-heading">用户列表</div>
-					<div class="panel-body">
-						<div id="toolbar">
-							<button id="bt_add" class="btn btn-default" data-toggle="modal"
-								data-target="#myModal">添加</button>
-							<button id="bt_edit" disabled="true" class="btn btn-default"
-								data-toggle="modal" data-target="#myModal">编辑</button>
-						</div>
-						<table id="table"></table>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--/.row-->
-
-
-	</div>
-	<!--/.main-->
-
-	<!-- Modal -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="modal-title" id="myModalLabel">新增</h4>
-				</div>
-				<div class="modal-body">
-					<div class="form-group">
-						<input type="text" class="form-control" id="username"
-							placeholder="用户名">
-					</div>
-					<div class="form-group" id="password_div">
-						<input type="password" class="form-control" id="password"
-							placeholder="密码">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="realname"
-							placeholder="姓名">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="department"
-							placeholder="部门">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="email"
-							placeholder="邮件">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="phone"
-							placeholder="电话">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="role"
-							placeholder="用户角色">
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" id="save">保存</button>
-				</div>
-			</div>
-		</div>
 	</div>
 
-	<script src="static/js/jquery-1.11.1.min.js"></script>
-	<script src="static/js/bootstrap.min.js"></script>
-	<script src="static/js/chart.min.js"></script>
+	<script src="<%=basePath%>static/js/jquery-1.11.1.min.js"></script>
+	<script src="<%=basePath%>static/js/bootstrap.min.js"></script>
+	<script src="<%=basePath%>static/js/chart.min.js"></script>
 
-	<script src="static/js/easypiechart.js"></script>
+	<script src="<%=basePath%>static/js/easypiechart.js"></script>
 
-	<script src="static/js/bootstrap-datepicker.js"></script>
-	<script src="static/js/bootstrap-table.js"></script>
-	<script src="static/js/custom.js"></script>
-	<script>
-	
-		$(function(){
-			$('#table').bootstrapTable({
-				
-				pagination:true,
-				showToggle:true,
-				showRefresh:true,
-				showColumns:true,
-				singleSelect:true,
-				rowStyle: rowStyle,
-				search:true,
-				clickToSelect:true,
-				toolbar:"#toolbar",
-				url: 'userlist',
-				sidePagination: 'server',
-				columns: [{
-				checkbox:true
-				},{ 
-				field: "username",
-				title: "姓名",
-				sortable: true,
-				},
-				{ 
-				field: "department",
-				title: "部门"
-				},{ 
-				field: "email",
-				title: "邮件"
-				},{ 
-				field: "phone",
-				title: "电话"
-				},{ 
-				field: "role",
-				title: "用户角色"
-				}]
-			});
-
-			$('#table').on('check.bs.table',function(row,e){
-				$("#bt_edit").attr("disabled",false);
-			});
-			$('#table').on('uncheck.bs.table',function(row,e){
-				$("#bt_edit").attr("disabled",true);
-			});
-			
-			$("#bt_add").click(add);
-			$("#bt_edit").click(edit);
-			$("#save").click(save);			
-		});
-		var url="useradd";
-
-$.postJSON = function(url,jsondata,callback){//JSON请求
-		return jQuery.ajax({
-			'type' : 'POST',
-			'url' : url,
-			'contentType' : 'application/json',
-			'data' : JSON.stringify(jsondata),
-			'dataType' : 'json',
-			'success' : callback
-		});
-	};
-
-function save() {
-        var dataJson = {
-            "username": $("#username").val(),
-            "department": $("#department").val(),
-            "email": $("#email").val(),
-            "phone": $("#phone").val()
-        };
-        $.postJSON(url,dataJson,function(result){
-			table.ajax.reload();
-			$("#myModal").modal("hide");
-		});
-    }
-	
-	function add(){
-		url="useradd";
-		$("#password_div").show();
-		$("#myModalLabel").text("新增");
-		$("#username").val("");
-		$("#department").val("");
-		$("#email").val("");
-		$("#phone").val("");
-		$("#role").val("");
-	}
-	
-	function edit(){
-		$("#myModalLabel").text("编辑");
-		$("#password_div").hide();
-		url="edit";
-		var rowData = $('#table').bootstrapTable('getSelections');
-		var s = rowData[0].username;
-		$("#username").val(rowData[0].username);
-		$("#department").val(rowData[0].department);
-		$("#email").val(rowData[0].email);
-		$("#phone").val(rowData[0].phone);
-		$("#role").val(rowData[0].role);
-	}
-						    function rowStyle(row, index) {
-						        var classes = ['active', 'success', 'info', 'warning', 'danger'];
-						
-						        if (index % 2 === 0 && index / 2 < classes.length) {
-						            return {
-						                classes: classes[index / 2]
-						            };
-						        }
-						        return {};
-						    }
-	</script>
+	<script src="<%=basePath%>static/js/bootstrap-datepicker.js"></script>
+	<script src="<%=basePath%>static/js/bootstrap-table.js"></script>
+	<script src="<%=basePath%>static/js/custom.js"></script>
 </body>
 
 </html>

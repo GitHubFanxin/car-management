@@ -42,7 +42,7 @@ import pers.fanxin.carmanagement.security.utils.UserHelper;
  * @date 2016年4月20日
  */
 public class UserServiceTest {
-	ApplicationContext context = new FileSystemXmlApplicationContext("src/main/resource/spring-*.xml");
+	ApplicationContext context = new FileSystemXmlApplicationContext("src/main/resource/test-*.xml");
 	UserService userService=(UserService) context.getBean("userServiceImpl");
 	RoleDAO roleDao = (RoleDAO) context.getBean("roleDAOImpl");
 	TestUtils testUtils = new TestUtils();
@@ -52,10 +52,7 @@ public class UserServiceTest {
 
 	@Before
 	public void setUp() throws Exception {
-		sessionFactory = (SessionFactory) context.getBean("sessionFactory"); 
-		session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-		
+
 	}
 	
 	@Test
@@ -65,10 +62,19 @@ public class UserServiceTest {
 //		userService.createUser(user);
 //		userService.createUser("fanxin", "fanxin@qq.com", "12345", "1,3");
 //		userService.createUser("fanxin2", "fanxin@qq.com", "12345", "1,3");
-		User user = userService.findUserByName("fanxin");
-		Hibernate.initialize(user);
-		System.out.println(UserHelper.getUserRole(user));
-		Assert.assertEquals(user.getPassword(), EncryptHelper.encryptPassword("12345", user.getCredentialSalt()));
+//		User user = userService.findUserByName("fanxin");
+//		Hibernate.initialize(user);
+//		System.out.println(UserHelper.getUserRole(user));
+//		Assert.assertEquals(user.getPassword(), EncryptHelper.encryptPassword("12345", user.getCredentialSalt()));
+		User user = new User();
+		user.setUsername("admin");
+		user.setRealname("管理员");
+		user.setWorkNum("0");
+		user.setPayNum("0");
+		user.setEmail(null);
+		user.setPassword("admin");
+		user.setRole(new HashSet<Role>(roleDao.findAll(Role.class)));
+		userService.createUser(user);
 	}
 	
 //	@Test

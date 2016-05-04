@@ -17,6 +17,9 @@ public interface RoleService {
 	 * @date 2016年4月21日
 	 */
 	public Long createRole(String rolename, String description);
+	
+	public Long createRole(Role role);
+	
 	/**
 	 * 
 	 * @Description: 删除角色

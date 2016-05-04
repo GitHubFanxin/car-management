@@ -29,7 +29,8 @@ public interface UserService {
 	 * @author fanxin
 	 * @date 2016年4月21日
 	 */
-	Long createUser(String username, String email, String password, String roleId);
+	Long createUser(String username, String realname, String workNum, 
+			String payNum, String email, String password, String roleId);
 	/**
 	 * 
 	 * @Description: 根据用户名查找用户
@@ -57,4 +58,6 @@ public interface UserService {
 	List<User> findUserByPage(int offset, int pageSize, String condition);
 	
 	long findCount(String condition);
+	
+	void deleteUser(long id);
 }

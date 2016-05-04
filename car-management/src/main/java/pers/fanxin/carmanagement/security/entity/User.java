@@ -20,12 +20,13 @@ public class User{
 	@Column(name="user_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long userId;
+	private String workNum;
 	private String username;
 	private String password;
 	private String salt;
 	private String realname;
+	private String payNum;
 	private String sex;
-	private int age;
 	private String department;
 	private String phone;
 	private String email;
@@ -61,12 +62,6 @@ public class User{
 	}
 	public void setSex(String sex) {
 		this.sex = sex;
-	}
-	public int getAge() {
-		return age;
-	}
-	public void setAge(int age) {
-		this.age = age;
 	}
 	public String getDepartment() {
 		return department;
@@ -106,5 +101,17 @@ public class User{
 	}
 	public void setSalt(String salt) {
 		this.salt = salt;
+	}
+	public String getPayNum() {
+		return payNum;
+	}
+	public void setPayNum(String payNum) {
+		this.payNum = payNum;
+	}
+	public String getWorkNum() {
+		return workNum;
+	}
+	public void setWorkNum(String workNum) {
+		this.workNum = workNum;
 	}
 }

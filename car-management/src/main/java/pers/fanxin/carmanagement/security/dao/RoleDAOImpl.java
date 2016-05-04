@@ -18,8 +18,6 @@ public class RoleDAOImpl extends BaseHibernateDAO<Role> implements RoleDAO{
 
 	@Override
 	public void deleteRole(Long id) {
-//		Role role = getRoleById(id);
-//		this.delete(role);
 		SQLQuery query = this.getSessionFactory().getCurrentSession().createSQLQuery("delete from role_permission where role_permission.role_id=?");
 		query.setParameter(0, id);
 		query.executeUpdate();

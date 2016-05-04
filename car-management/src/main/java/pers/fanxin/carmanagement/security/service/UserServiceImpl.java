@@ -22,14 +22,18 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public Long createUser(User user) {
+		EncryptHelper.encryptPassword(user);
 		return userDAO.createUser(user);
 	}
 
 	@Override
-	public Long createUser(String username, String email, String password,
-			String roleId) {
+	public Long  createUser(String username, String realname, String workNum, 
+			String payNum, String email, String password, String roleId) {
 		User user = new User();
 		user.setUsername(username);
+		user.setRealname(realname);
+		user.setWorkNum(workNum);
+		user.setPayNum(payNum);
 		user.setEmail(email);
 		user.setPassword(password);
 		String[] roleIds = roleId.split(",");
@@ -66,6 +70,11 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public long findCount(String condition) {
 		return userDAO.findCount(condition);
+	}
+
+	@Override
+	public void deleteUser(long id) {
+		userDAO.deleteUser(id);
 	}
 	
 

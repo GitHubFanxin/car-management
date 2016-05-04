@@ -122,14 +122,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
-				<li class="active">角色管理</li>
+				<li class="active">用户管理</li>
 			</ol>
 		</div>
 		<!--/.row-->
 
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">角色管理</h1>
+				<h1 class="page-header">用户管理</h1>
 			</div>
 		</div>
 		<!--/.row-->
@@ -138,14 +138,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">角色列表</div>
+					<div class="panel-heading">用户列表</div>
 					<div class="panel-body">
 						<div id="toolbar">
 							<button id="bt_add" class="btn btn-default" data-toggle="modal"
 								data-target="#myModal">添加</button>
 							<button id="bt_edit" disabled="true" class="btn btn-default"
 								data-toggle="modal" data-target="#myModal">编辑</button>
-							<button id="bt_delete" disabled="true" class="btn btn-default"
+								<button id="bt_delete" disabled="true" class="btn btn-default"
 								data-toggle="modal" data-target="#delete_modal">删除</button>
 						</div>
 						<table id="table"></table>
@@ -173,13 +173,41 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<input type="text" class="form-control" id="roleName"
-							placeholder="角色名">
+						<input type="text" class="form-control" id="username"
+							required="required" placeholder="用户名">
+					</div>
+					<div class="form-group" id="password_div">
+						<input type="password" class="form-control" id="password"
+							placeholder="密码">
 					</div>
 					<div class="form-group">
-						<input type="text" class="form-control" id="description"
-							placeholder="角色描述">
-					</div>					
+						<input type="text" class="form-control" id="realname"
+							required="required" placeholder="姓名">
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" id="workNum"
+							required="required" placeholder="工号">
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" id="payNum"
+							placeholder="工资号">
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" id="department"
+							placeholder="部门">
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" id="email"
+							placeholder="邮件">
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" id="phone"
+							placeholder="电话">
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" id="role"
+							placeholder="用户角色">
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -188,7 +216,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</div>
 	</div>
-<!--Delete Modal -->
+	
+	<!--Delete Modal -->
 <div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -206,7 +235,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
         </div>
     </div>
-</div>
+</div>	
+	
 
 	<script src="<%=basePath%>static/js/jquery-1.11.1.min.js"></script>
 	<script src="<%=basePath%>static/js/bootstrap.min.js"></script>
@@ -232,28 +262,45 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				search:true,
 				clickToSelect:true,
 				toolbar:"#toolbar",
-				url: "<%=basePath%>manage/role/list",
+				url: '<%=basePath%>manage/user/list',
 				sidePagination: 'server',
 				columns: [{
 				checkbox:true
 				},{ 
-				field: "roleName",
-				title: "角色名",
-				sortable: true,
-				},
-				{ 
-				field: "description",
-				title: "角色描述"
+					field: "workNum",
+					title: "工号",
+					sortable: true,
+				},{ 
+					field: "realname",
+					title: "姓名",
+					sortable: true,
+				},{ 
+					field: "username",
+					title: "用户名",
+					sortable: true,
+				},{
+					field: "payNum",
+					title: "工资号"
+				},{ 
+					field: "department",
+					title: "部门"
+				},{ 
+					field: "email",
+					title: "邮件"
+				},{ 
+					field: "phone",
+					title: "电话"
+				},{ 
+					field: "role",
+					title: "用户角色"
 				}]
 			});
 
 			$('#table').on('check.bs.table',function(row,e){
 				$("#bt_edit").attr("disabled",false);
-				$("#bt_delete").attr("disabled",false);
 			});
 			$('#table').on('uncheck.bs.table',function(row,e){
 				$("#bt_edit").attr("disabled",true);
-				$("#bt_delete").attr("disabled",true);
 			});
 			
 			$("#bt_add").click(add);
@@ -262,12 +309,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				var rowData = $('#table').bootstrapTable('getSelections');
 				$("#delete_span").text(rowData[0].roleName);
 			});
-			$("#delete").click(deleterole);
-			$("#save").click(save);			
+			$("#save").click(save);		
+			$("#delete").click(deleteuser);
 		});
 		
 		var isEdit=false;
-		
+
 $.postJSON = function(url,jsondata,callback){//JSON请求
 		return jQuery.ajax({
 			'type' : 'POST',
@@ -280,40 +327,59 @@ $.postJSON = function(url,jsondata,callback){//JSON请求
 	};
 
 function save() {
-		var saveUrl;
-		if(isEdit){
-			saveUrl="edit";
-			var rowData = $('#table').bootstrapTable('getSelections');
-			var dataJson = {
-					"roleId":rowData[0].roleId,
-		            "roleName": $("#roleName").val(),
-		            "description": $("#description").val(),
-		        };
-		}else{
-			saveUrl="add";
-			var dataJson = {
-		            "roleName": $("#roleName").val(),
-		            "description": $("#description").val(),
-		        };
-		}
-        $.postJSON(saveUrl,dataJson,function(result){
-        	$('#table').bootstrapTable('refresh');
-			$("#myModal").modal("hide");
-		});
-    }
+	var saveUrl;
+	if(isEdit){
+		saveUrl="edit";
+		var rowData = $('#table').bootstrapTable('getSelections');
+		var dataJson = {
+				"userId":rowData.userId,
+				"username": $("#username").val(),
+				"realname":$("#realname").val(),
+				"workNum":$("#workNum").val(),
+				"payNum":$("#payNum").val(),
+	            "department": $("#department").val(),
+	            "email": $("#email").val(),
+	            "phone": $("#phone").val()
+	        };
+	}else{
+		saveUrl="add";
+		var dataJson = {
+				"username": $("#username").val(),
+				"password": $("#password").val(),
+				"realname":$("#realname").val(),
+				"workNum":$("#workNum").val(),
+				"payNum":$("#payNum").val(),
+	            "department": $("#department").val(),
+	            "email": $("#email").val(),
+	            "phone": $("#phone").val()
+	        };
+	}
+     $.postJSON(saveUrl,dataJson,function(result){
+    	 $('#table').bootstrapTable('refresh');
+		$("#myModal").modal("hide");
+	});
+ }
 	
 	function add(){
 		isEdit=false;
+		$("#password_div").show();
 		$("#myModalLabel").text("新增");
-		$("#roleName").val("");
-		$("#description").val("");
+		$("#username").val("");
+		$("#realname").val("");
+		$("#workNum").val("");
+		$("#payNum").val("");
+		$("#password").val("");
+		$("#department").val("");
+		$("#email").val("");
+		$("#phone").val("");
+		$("#role").val("");
 	}
 	
-	function deleterole(){
+	function deleteuser(){
 		var url="delete";
 		var rowData = $('#table').bootstrapTable('getSelections');
 		var dataJson = {
-	            "roleId": rowData[0].roleId,
+	            "userId": rowData[0].roleId,
 	        };
 	        $.postJSON(url,dataJson,function(result){
 	        	$('#table').bootstrapTable('refresh');
@@ -323,17 +389,24 @@ function save() {
 	
 	function edit(){
 		$("#myModalLabel").text("编辑");
+		$("#password_div").hide();
 		isEdit=true;
 		var rowData = $('#table').bootstrapTable('getSelections');
-		$("#roleName").val(rowData[0].roleName);
-		$("#description").val(rowData[0].description);
+		$("#username").val(rowData[0].username);
+		$("#realname").val(rowData[0].realname);
+		$("#workNum").val(rowData[0].workNum);
+		$("#payNum").val(rowData[0].payNum);
+		$("#department").val(rowData[0].department);
+		$("#email").val(rowData[0].email);
+		$("#phone").val(rowData[0].phone);
+		$("#role").val(rowData[0].role);
 	}
 						    function rowStyle(row, index) {
 						        var classes = ['success', 'info', 'warning', 'danger'];
 						
-						        if (index % 2 === 0) {
+						        if (index % 2 === 0 ) {
 						            return {
-						                classes: classes[index / 2 % 4]
+						                classes: classes[index/2%4]
 						            };
 						        }
 						        return {};

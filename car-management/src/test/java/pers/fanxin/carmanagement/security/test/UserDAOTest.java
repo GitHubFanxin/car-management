@@ -17,7 +17,7 @@ import pers.fanxin.carmanagement.security.entity.Role;
 import pers.fanxin.carmanagement.security.utils.UserHelper;
 
 public class UserDAOTest {
-	ApplicationContext context = new FileSystemXmlApplicationContext("src/main/resource/spring-*.xml");
+	ApplicationContext context = new FileSystemXmlApplicationContext("src/main/resource/test-*.xml");
 	PermissionDAO permissionDao = (PermissionDAO) context.getBean("permissionDAOImpl");
 	RoleDAO roleDao = (RoleDAO) context.getBean("roleDAOImpl");
 	UserDAO userDao = (UserDAO) context.getBean("userDAOImpl");
@@ -26,14 +26,13 @@ public class UserDAOTest {
 	public void setUp() throws Exception {
 	}
 
-//	@Test
+	@Test
 	public void createUserTest() {
 		User user = testUtils.getUserCase();
-		user.setRole(new HashSet<Role>(roleDao.findAll(Role.class)));
 		userDao.createUser(user);
 	}
 	
-	@Test
+//	@Test
 	public void findTest(){
 		User user = userDao.findByName("fanxin");
 		System.out.println(UserHelper.getUserRole(user));

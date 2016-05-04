@@ -42,4 +42,9 @@ public class RoleServiceImpl implements RoleService{
 		return roleDAO.findCount(condition);
 	}
 
+	@Override
+	public Long createRole(Role role) {
+		return roleDAO.createRole(role);
+	}
+
 }
