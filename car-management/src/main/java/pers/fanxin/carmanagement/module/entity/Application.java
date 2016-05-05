@@ -7,9 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Table(name="t_application")
@@ -21,13 +24,18 @@ public class Application {
 	private String destination;
 	private String starting;
 	private boolean Roundtrip;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date applyDate;
 	private Long applicantId;
 	private String applicantName;//申请人
 	private String remark;
 	private String state;
-	
+	@OneToOne(targetEntity=RouteLog.class)
+	@JoinColumn(name="log_id", referencedColumnName="log_id",unique=true)
+	@Cascade(CascadeType.ALL)
+	private RouteLog routeLog;
+	@OneToOne(targetEntity=Approve.class)
+	@JoinColumn(name="approve_id", referencedColumnName="approve_id",unique=true)
+	@Cascade(CascadeType.ALL)
 	private Approve approve;
 	
 	public Long getApplicationId() {
@@ -71,5 +79,29 @@ public class Application {
 	}
 	public void setState(String state) {
 		this.state = state;
+	}
+	public boolean isRoundtrip() {
+		return Roundtrip;
+	}
+	public void setRoundtrip(boolean roundtrip) {
+		Roundtrip = roundtrip;
+	}
+	public Date getApplyDate() {
+		return applyDate;
+	}
+	public void setApplyDate(Date applyDate) {
+		this.applyDate = applyDate;
+	}
+	public RouteLog getRouteLog() {
+		return routeLog;
+	}
+	public void setRouteLog(RouteLog routeLog) {
+		this.routeLog = routeLog;
+	}
+	public Approve getApprove() {
+		return approve;
+	}
+	public void setApprove(Approve approve) {
+		this.approve = approve;
 	}
 }

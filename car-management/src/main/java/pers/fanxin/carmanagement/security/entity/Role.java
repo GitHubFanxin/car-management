@@ -1,5 +1,6 @@
 package pers.fanxin.carmanagement.security.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -27,7 +28,23 @@ public class Role{
 					referencedColumnName="role_id"),
 			inverseJoinColumns=@JoinColumn(name="permission_id",
 					referencedColumnName="permission_id"))
-	private Set<Permission> Permissions;
+	private Set<Permission> Permissions = new HashSet<Permission>();
+	
+	@ManyToMany(targetEntity=User.class)
+	@JoinTable(name="user_role",
+			joinColumns=@JoinColumn(name="role_id"
+				,referencedColumnName="role_id"), 
+			inverseJoinColumns=@JoinColumn(name="user_id"
+				,referencedColumnName="user_id")
+			)
+	private Set<User> user=new HashSet<User>();
+	
+	public Set<User> getUser() {
+		return user;
+	}
+	public void setUser(Set<User> user) {
+		this.user = user;
+	}
 	public Long getRoleId() {
 		return roleId;
 	}

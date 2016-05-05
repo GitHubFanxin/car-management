@@ -1,5 +1,6 @@
 package pers.fanxin.carmanagement.security.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -37,7 +38,7 @@ public class User{
 			inverseJoinColumns=@JoinColumn(name="role_id"
 				,referencedColumnName="role_id")
 			)
-	private Set<Role> role;
+	private Set<Role> role=new HashSet<Role>();
 	
 	public Long getUserId() {
 		return userId;

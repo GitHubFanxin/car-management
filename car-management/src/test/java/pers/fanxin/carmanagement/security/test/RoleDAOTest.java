@@ -4,7 +4,10 @@ import static org.junit.Assert.*;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -27,7 +30,7 @@ public class RoleDAOTest {
 		
 	}
 
-	@Test
+//	@Test
 	public void createRoleTest() {
 //		Role r = testCase.getRoleCase("admin23", "user:add");
 //		Set<Permission> permissions = testCase.getPermissionsCase();
@@ -75,5 +78,11 @@ public class RoleDAOTest {
 		permissions.addAll(permissionDao.getAllPermissions());
 		role.setPermissions(permissions);
 		roleDao.updateRole(role);
+	}
+	
+	@Test
+	public void getRoleTest(){
+		Role roles = roleDao.getRoleByName("admin");
+		Assert.assertEquals("admin", roles.getRoleName());
 	}
 }
