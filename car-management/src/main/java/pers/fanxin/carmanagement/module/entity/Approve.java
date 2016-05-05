@@ -3,11 +3,18 @@ package pers.fanxin.carmanagement.module.entity;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+@Entity
+@Table(name="t_approve")
 public class Approve {
 	@Id
 	@Column(name="approve_id")
@@ -19,6 +26,7 @@ public class Approve {
 	private Long driverId;
 	private String driverName;
 	@OneToOne(targetEntity=Application.class,mappedBy="approve")
+	@Cascade(CascadeType.ALL)
 	private Application application;
 	public Long getApproveId() {
 		return approveId;

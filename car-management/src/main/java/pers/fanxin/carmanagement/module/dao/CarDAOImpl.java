@@ -2,9 +2,11 @@ package pers.fanxin.carmanagement.module.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import pers.fanxin.carmanagement.common.hibernate.BaseHibernateDAO;
 import pers.fanxin.carmanagement.module.entity.Car;
-
+@Repository
 public class CarDAOImpl extends BaseHibernateDAO<Car> 
 	implements CarDAO{
 

@@ -22,7 +22,7 @@ public class Application {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long applicationId;
 	private String destination;
-	private String starting;
+	private String startpoint;
 	private boolean Roundtrip;
 	private Date applyDate;
 	private Long applicantId;
@@ -50,11 +50,12 @@ public class Application {
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
-	public String getStarting() {
-		return starting;
+
+	public String getStartpoint() {
+		return startpoint;
 	}
-	public void setStarting(String starting) {
-		this.starting = starting;
+	public void setStartpoint(String startpoint) {
+		this.startpoint = startpoint;
 	}
 	public Long getApplicantId() {
 		return applicantId;

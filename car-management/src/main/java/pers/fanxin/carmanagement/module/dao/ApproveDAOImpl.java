@@ -2,9 +2,11 @@ package pers.fanxin.carmanagement.module.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import pers.fanxin.carmanagement.common.hibernate.BaseHibernateDAO;
 import pers.fanxin.carmanagement.module.entity.Approve;
-
+@Repository
 public class ApproveDAOImpl extends BaseHibernateDAO<Approve>
 	implements ApproveDAO{
 

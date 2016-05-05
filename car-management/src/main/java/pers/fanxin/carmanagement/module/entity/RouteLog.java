@@ -12,8 +12,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 @Entity
-@Table(name="t_uselog")
+@Table(name="t_routelog")
 public class RouteLog {
 	@Id
 	@Column(name="log_id")
@@ -21,13 +24,14 @@ public class RouteLog {
 	private Long logId;
 	private Date startDate;
 	private Date endDate;
-	private float cost;
+	private Double cost;
 	private Long driverId;
 	private String driverName;
 	@ManyToOne(targetEntity=Car.class)
 	@JoinColumn(name="car_id",nullable=false)
 	private Car car;
 	@OneToOne(targetEntity=Application.class,mappedBy="routeLog")
+	@Cascade(CascadeType.ALL)
 	private Application application;
 	public Long getLogId() {
 		return logId;
@@ -47,10 +51,10 @@ public class RouteLog {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-	public float getCost() {
+	public Double getCost() {
 		return cost;
 	}
-	public void setCost(float cost) {
+	public void setCost(Double cost) {
 		this.cost = cost;
 	}
 	public Long getDriverId() {
