@@ -36,6 +36,8 @@ public class BaseHibernateDAO<T> implements BaseDAO<T> {
 	@Override
 	public void delete(T entity) {
 		getSessionFactory().getCurrentSession().delete(entity);
+		getSessionFactory().getCurrentSession().flush();
+		getSessionFactory().getCurrentSession().clear();
 	}
 
 	@Override

@@ -28,21 +28,20 @@ import pers.fanxin.carmanagement.security.vo.UserVO;
 
 
 @Controller
-@RequestMapping("/manage/user")
-@RequiresRoles("admin")
+@RequestMapping("/basedata")
 public class UserManageController {
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private RoleService roleService;
 	
-	@RequestMapping("/page")
+	@RequestMapping("/user")
 	public String roleManage(){
 		 SecurityUtils.getSubject().checkRole("admin");
 		return "user_manage";
 	}
 	
-	@RequestMapping("/list")
+	@RequestMapping("/user/list")
 	@ResponseBody
 	public Object userList(HttpServletRequest request,int limit,int offset,String search){
 		List<User> users = userService.findUserByPage(offset, limit, search);
@@ -65,28 +64,28 @@ public class UserManageController {
 		return page;
 	}
 	
-	@RequestMapping("/add")
+	@RequestMapping("/user/add")
 	@ResponseBody
 	public Object userAdd(HttpServletRequest request,@RequestBody UserVO userVO){
 		userService.createUser(userVO);
 		return "fail";
 	}
 	
-	@RequestMapping("/edit")
+	@RequestMapping("/user/edit")
 	@ResponseBody
 	public Object roleEdit(@RequestBody UserVO userVO){
 		userService.updateUser(userVO);
 		return "{'state':true}";
 	}
 	
-	@RequestMapping("/delete")
+	@RequestMapping("/user/delete")
 	@ResponseBody
 	public Object roleDelete(@RequestBody UserVO userVO){
 		userService.deleteUser(userVO.getUserId());
 		return "{'state':true}";
 	}
 	
-	@RequestMapping("/roletree")
+	@RequestMapping("/user/roletree")
 	@ResponseBody
 	public Object roleTree(@RequestBody UserVO userVO){
 		Set<Role> curRoles;

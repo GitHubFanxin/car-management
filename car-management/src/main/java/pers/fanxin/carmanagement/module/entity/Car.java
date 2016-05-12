@@ -14,6 +14,7 @@ public class Car {
 	@Column(name="car_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long carId;
+	private String carNum;
 	private String carName;
 	private String description;
 	private String state;
@@ -47,5 +48,11 @@ public class Car {
 	}
 	public void setAvailable(Boolean available) {
 		this.available = available;
+	}
+	public String getCarNum() {
+		return carNum;
+	}
+	public void setCarNum(String carNum) {
+		this.carNum = carNum;
 	}
 }

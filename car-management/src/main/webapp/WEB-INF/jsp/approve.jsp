@@ -115,7 +115,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<li><a href="<%=basePath %>basedata/setting"><span
 					class="glyphicon glyphicon-user"></span> 设置 </a></li>
 		</ul>
-
 	</div>
 	<!--/.sidebar-->
 
@@ -123,17 +122,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="<%=basePath %>home"><span class="glyphicon glyphicon-home"></span></a></li>
-				<li class="active"> 主面板</li>
+				<li class="active">公车使用</li>
 			</ol>
 		</div>
 		<!--/.row-->
 
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header"> 主面板</h1>
+				<h1 class="page-header">公车使用</h1>
 			</div>
 		</div>
 		<!--/.row-->
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">用车申请管理</div>
+					<div class="panel-body">
+						<div id="toolbar">
+							<button id="bt_pass" class="btn btn-primary" disabled="disabled">通过</button>
+						</div>
+						<table id="table"></table>
+					</div>
+				</div>
+			</div>
+		</div>
 
 	</div>
 
@@ -146,6 +159,94 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="<%=basePath%>static/js/bootstrap-datepicker.js"></script>
 	<script src="<%=basePath%>static/js/bootstrap-table.js"></script>
 	<script src="<%=basePath%>static/js/custom.js"></script>
+	<script>
+	
+		$(function(){
+			$('#table').bootstrapTable({
+				method:"post",
+				contentType:"application/x-www-form-urlencoded",
+				pagination:true,
+				showToggle:true,
+				showRefresh:true,
+				showColumns:true,
+
+				rowStyle: rowStyle,
+				search:true,
+				clickToSelect:true,
+				toolbar:"#toolbar",
+				url: "<%=basePath%>manage/approve/unapproved-list",
+				sidePagination: 'server',
+				columns: [{
+				checkbox:true
+				},{ 
+					field: "applicationId",
+					title: "申请编号",
+					sortable: true,
+				},{
+					field: "applicantName",
+					title: "申请人"
+				},{ 
+					field: "startpoint",
+					title: "出发地"
+				},{ 
+					field: "destination",
+					title: "目的地"
+				},{
+					field: "roundtrip",
+					title: "往返"
+				},{
+					field: "applyDate",
+					title: "申请日期"
+				},{
+					field: "state",
+					title: "状态"
+				}]
+			});
+			$('#bt_pass').click(pass);
+			$('#table').on('check.bs.table',function(row,e){
+				$("#bt_pass").attr("disabled",false);
+			});
+			$('#table').on('uncheck.bs.table',function(row,e){
+				$("#bt_pass").attr("disabled",true);
+			});
+		});
+		
+		$.postJSON = function(url,jsondata,callback){//JSON请求
+			return jQuery.ajax({
+				'type' : 'POST',
+				'url' : url,
+				'contentType' : 'application/json',
+				'data' : JSON.stringify(jsondata),
+				'dataType' : 'json',
+				'success' : callback
+			});
+		};
+		
+		function pass(){
+			var rowData = $('#table').bootstrapTable('getSelections');
+			var json = [];
+			for(var i=0;i<rowData.length;i++){
+				var node = {"applicationId":rowData[i].applicationId};
+				json.push(node);
+			}
+			url = "approve/pass";
+			 $.postJSON(url,json,function(result){
+		        	$('#table').bootstrapTable('refresh');
+					$("#bt_pass").attr("disabled",true);
+				});
+		}
+		
+		function rowStyle(row, index) {
+	        var classes = ['success', 'info', 'warning', 'danger'];
+	
+	        if (index % 2 === 0 ) {
+	            return {
+	                classes: classes[index/2%4]
+	            };
+	        }
+	        return {};
+	    }
+	</script>
 </body>
 
 </html>

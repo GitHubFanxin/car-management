@@ -115,7 +115,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<li><a href="<%=basePath %>basedata/setting"><span
 					class="glyphicon glyphicon-user"></span> 设置 </a></li>
 		</ul>
-
 	</div>
 	<!--/.sidebar-->
 
@@ -123,17 +122,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="<%=basePath %>home"><span class="glyphicon glyphicon-home"></span></a></li>
-				<li class="active"> 主面板</li>
+				<li class="active">公车使用</li>
 			</ol>
 		</div>
 		<!--/.row-->
 
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header"> 主面板</h1>
+				<h1 class="page-header">公车使用</h1>
 			</div>
 		</div>
 		<!--/.row-->
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">我的申请记录</div>
+					<div class="panel-body">
+						<div id="toolbar">
+							<button id="bt_add" class="btn btn-default"  onclick="window.location.href('<%=basePath %>usecar/apply">添加</button>
+						</div>
+						<table id="table"></table>
+					</div>
+				</div>
+			</div>
+		</div>
 
 	</div>
 
@@ -146,6 +159,58 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="<%=basePath%>static/js/bootstrap-datepicker.js"></script>
 	<script src="<%=basePath%>static/js/bootstrap-table.js"></script>
 	<script src="<%=basePath%>static/js/custom.js"></script>
+	<script>
+	
+		$(function(){
+			$('#table').bootstrapTable({
+				method:"post",
+				contentType:"application/x-www-form-urlencoded",
+				pagination:true,
+				showToggle:true,
+				showRefresh:true,
+				showColumns:true,
+				singleSelect:true,
+				rowStyle: rowStyle,
+				search:true,
+				clickToSelect:true,
+				toolbar:"#toolbar",
+				url: "<%=basePath%>usecar/myapplication/list",
+				sidePagination: 'server',
+				columns: [{
+				checkbox:true
+				},{ 
+					field: "applicationId",
+					title: "申请编号",
+					sortable: true,
+				},{ 
+					field: "startpoint",
+					title: "出发地"
+				},{ 
+					field: "destination",
+					title: "目的地"
+				},{
+					field: "roundtrip",
+					title: "往返"
+				},{
+					field: "applyDate",
+					title: "申请日期"
+				},{
+					field: "state",
+					title: "状态"
+				}]
+			});
+		});
+		 function rowStyle(row, index) {
+		        var classes = ['success', 'info', 'warning', 'danger'];
+		
+		        if (index % 2 === 0) {
+		            return {
+		                classes: classes[index / 2 % 4]
+		            };
+		        }
+		        return {};
+		    }
+	</script>
 </body>
 
 </html>

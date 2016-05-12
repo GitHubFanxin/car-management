@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import pers.fanxin.carmanagement.common.hibernate.BaseHibernateDAO;
 import pers.fanxin.carmanagement.module.entity.Car;
+import pers.fanxin.carmanagement.security.entity.Role;
 @Repository
 public class CarDAOImpl extends BaseHibernateDAO<Car> 
 	implements CarDAO{
@@ -29,11 +30,11 @@ public class CarDAOImpl extends BaseHibernateDAO<Car>
 	public List<Car> findCarsByPage(int offset, int pageSize, String condition) {
 		String hql;
 		if(condition==""||condition==null){
-			hql = "from "+Car.class.getSimpleName();
+			hql = "from "+Car.class.getSimpleName()+" order by carNum";
 			return findByPage(hql, offset, pageSize);
 		}else{
-			hql = "from "+Car.class.getSimpleName()+" where carName like ?";
-			return findByPage(hql, offset, pageSize, "%"+condition+"%");
+			hql = "from "+Car.class.getSimpleName()+" where carName like ? or carNum like ? order by carNum";
+			return findByPage(hql, offset, pageSize, "%"+condition+"%", "%"+condition+"%");
 		}
 	}
 
@@ -45,6 +46,23 @@ public class CarDAOImpl extends BaseHibernateDAO<Car>
 			return cars.get(0);
 		}
 		return null;
+	}
+
+	@Override
+	public long findCount(String condition) {
+		String hql;
+		List<?> l ;
+		if(condition==null||condition==""){
+			hql = "select count(*) from "+Car.class.getSimpleName();
+			l = find(hql);
+		}else{
+			hql = "select count(*) from "+Car.class.getSimpleName()+" where carName like ? or carNum like ?";
+			l = find(hql,"%"+condition+"%", "%"+condition+"%");
+		}
+		if(l!=null&&l.size()==1){
+			return (Long)l.get(0);
+		}
+		return 0;
 	}
 
 }

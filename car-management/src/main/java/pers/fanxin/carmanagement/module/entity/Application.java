@@ -23,12 +23,12 @@ public class Application {
 	private Long applicationId;
 	private String destination;
 	private String startpoint;
-	private boolean Roundtrip;
+	private boolean roundtrip;
 	private Date applyDate;
 	private Long applicantId;
 	private String applicantName;//申请人
 	private String remark;
-	private String state;
+	private String state = "unapproved";//初始为未审核状态
 	@OneToOne(targetEntity=RouteLog.class)
 	@JoinColumn(name="log_id", referencedColumnName="log_id",unique=true)
 	@Cascade(CascadeType.ALL)
@@ -82,10 +82,10 @@ public class Application {
 		this.state = state;
 	}
 	public boolean isRoundtrip() {
-		return Roundtrip;
+		return roundtrip;
 	}
 	public void setRoundtrip(boolean roundtrip) {
-		Roundtrip = roundtrip;
+		this.roundtrip = roundtrip;
 	}
 	public Date getApplyDate() {
 		return applyDate;

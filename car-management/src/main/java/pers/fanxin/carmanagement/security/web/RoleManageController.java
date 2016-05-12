@@ -22,7 +22,7 @@ import pers.fanxin.carmanagement.security.entity.Role;
 import pers.fanxin.carmanagement.security.service.RoleService;
 
 @Controller
-@RequestMapping("/manage/role")
+@RequestMapping("/basedata")
 @RequiresRoles("admin")
 public class RoleManageController {
 	
@@ -30,15 +30,16 @@ public class RoleManageController {
 	private RoleService roleService;
 	
 	@RequiresRoles("admin")
-	@RequestMapping("/page")
+	@RequestMapping("/role")
 	public String roleManage(){
 		SecurityUtils.getSubject().checkRole("admin");
 		return "role_manage";
 	}
 	
-	@RequestMapping("/list")
+	@RequestMapping("/role/list")
 	@ResponseBody
 	public Object roleList(HttpServletRequest request, int limit, int offset, String search){
+		SecurityUtils.getSubject().checkRole("admin");
 		List<Role> roles = roleService.findRoleByPage(offset, limit, search);
 		List<Object> results = new ArrayList<Object>();
 		for(Role role:roles){
@@ -54,7 +55,7 @@ public class RoleManageController {
 		return page;
 	}
 	
-	@RequestMapping("/add")
+	@RequestMapping("/role/add")
 	@ResponseBody
 	public Object roleAdd(@RequestBody Role role){
 		if(roleService.createRole(role)>0){
@@ -63,14 +64,14 @@ public class RoleManageController {
 		return "{'state':false,'errMsg':'添加角色失败'}";
 	}
 	
-	@RequestMapping("/edit")
+	@RequestMapping("/role/edit")
 	@ResponseBody
 	public Object roleEdit(@RequestBody Role role){
 		roleService.updateRole(role);
 		return "{'state':true}";
 	}
 	
-	@RequestMapping("/delete")
+	@RequestMapping("/role/delete")
 	@ResponseBody
 	public Object roleDelete(@RequestBody Role role){
 		roleService.deleteRole(role.getRoleId());

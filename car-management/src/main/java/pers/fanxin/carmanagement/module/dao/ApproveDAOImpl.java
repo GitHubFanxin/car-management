@@ -48,4 +48,21 @@ public class ApproveDAOImpl extends BaseHibernateDAO<Approve>
 		return null;
 	}
 
+	@Override
+	public long findCount(String condition) {
+		String hql;
+		List<?> l ;
+		if(condition==null||condition==""){
+			hql = "select count(*) from "+Approve.class.getSimpleName();
+			l = find(hql);
+		}else{
+			hql = "select count(*) from "+Approve.class.getSimpleName()+" where approverName like ? or driverName like ?";
+			l = find(hql,"%"+condition+"%", "%"+condition+"%");
+		}
+		if(l!=null&&l.size()==1){
+			return (Long)l.get(0);
+		}
+		return 0;
+	}
+
 }

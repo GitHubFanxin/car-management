@@ -63,7 +63,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</form>
 		<ul class="nav menu">
-			<li><a href="index.html"><span
+			<li><a href="<%=basePath %>home"><span
 					class="glyphicon glyphicon-dashboard"></span> 主面板</a></li>
 			<li class="parent"><a data-toggle="collapse" href="#sub-item-1">
 					<span class="glyphicon glyphicon-th"></span> 系统管理 <span
@@ -71,10 +71,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						class="glyphicon glyphicon-s glyphicon-plus"></em></span>
 			</a>
 				<ul class="children collapse" id="sub-item-1">
-					<li><a class="" href="<%=basePath %>manage/user/page"> <span
+					<li><a class="" href="<%=basePath %>basedata/user"> <span
 							class="glyphicon glyphicon-share-alt"></span> 用户管理
 					</a></li>
-					<li><a class="" href="<%=basePath %>manage/role/page"> <span
+					<li><a class="" href="<%=basePath %>basedata/role"> <span
 							class="glyphicon glyphicon-share-alt"></span> 角色管理
 					</a></li>
 				</ul></li>
@@ -84,44 +84,44 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						class="glyphicon glyphicon-s glyphicon-plus"></em></span>
 			</a>
 				<ul class="children collapse" id="sub-item-2">
-					<li><a class="" href="#"> <span
+					<li><a class="" href="<%=basePath %>manage/approve"> <span
+							class="glyphicon glyphicon-share-alt"></span> 用车审核
+					</a></li>
+					<li><a class="" href="<%=basePath %>manage/car"> <span
 							class="glyphicon glyphicon-share-alt"></span> 车辆管理
 					</a></li>
-					<li><a class="" href="#"> <span
-							class="glyphicon glyphicon-share-alt"></span> 审核用车
+					<li><a class="" href="<%=basePath %>manage/driver"> <span
+							class="glyphicon glyphicon-share-alt"></span> 司机管理
 					</a></li>
 				</ul></li>
 			<li class="parent"><a data-toggle="collapse" href="#sub-item-3">
-					<span class="glyphicon glyphicon-info-sign"></span> 公车使用 <span
+					<span class="glyphicon glyphicon-info-sign"></span> 申请用车 <span
 					class="icon pull-right"><em
 						class="glyphicon glyphicon-s glyphicon-plus"></em></span>
 			</a>
 				<ul class="children collapse" id="sub-item-3">
-					<li><a class="" href="#"> <span
+					<li><a class="" href="<%=basePath %>usecar/myapplication"> <span
+							class="glyphicon glyphicon-share-alt"></span> 我的用车记录
+					</a></li>
+					<li><a class="" href="<%=basePath %>usecar/apply"> <span
 							class="glyphicon glyphicon-share-alt"></span> 申请用车
 					</a></li>
-					<li><a class="" href="#"> <span
-							class="glyphicon glyphicon-share-alt"></span> 任务接受
-					</a></li>
 				</ul></li>
-
-			<li><a href="charts.html"><span
-					class="glyphicon glyphicon-stats"></span> 使用统计</a></li>
+			<li><a href="<%=basePath %>usecar/mymission"><span
+					class="glyphicon glyphicon-stats"></span> 我的任务 </a></li>
+			<li><a href="<%=basePath %>manage/report"><span
+					class="glyphicon glyphicon-stats"></span> 使用报表 </a></li>
 			<li role="presentation" class="divider"></li>
-			<li><a href="login.html"><span
-					class="glyphicon glyphicon-user"></span> Login Page</a></li>
+			<li><a href="<%=basePath %>basedata/setting"><span
+					class="glyphicon glyphicon-user"></span> 设置 </a></li>
 		</ul>
-		<div class="attribution">
-			Template by <a
-				href="http://www.medialoot.com/item/lumino-admin-bootstrap-template/">Medialoot</a>
-		</div>
 	</div>
 	<!--/.sidebar-->
 
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
 			<ol class="breadcrumb">
-				<li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+				<li><a href="<%=basePath %>home"><span class="glyphicon glyphicon-home"></span></a></li>
 				<li class="active">用户管理</li>
 			</ol>
 		</div>
@@ -143,9 +143,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<div id="toolbar">
 							<button id="bt_add" class="btn btn-default" data-toggle="modal"
 								data-target="#myModal">添加</button>
-							<button id="bt_edit" disabled="true" class="btn btn-default"
+							<button id="bt_edit" disabled="disabled" class="btn btn-primary"
 								data-toggle="modal" data-target="#myModal">编辑</button>
-								<button id="bt_delete" disabled="true" class="btn btn-default"
+								<button id="bt_delete" disabled="disabled" class="btn btn-danger"
 								data-toggle="modal" data-target="#delete_modal">删除</button>
 						</div>
 						<table id="table"></table>
@@ -263,7 +263,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				search:true,
 				clickToSelect:true,
 				toolbar:"#toolbar",
-				url: '<%=basePath%>manage/user/list',
+				url: '<%=basePath%>basedata/user/list',
 				sidePagination: 'server',
 				columns: [{
 				checkbox:true
@@ -342,7 +342,7 @@ function save() {
 	}
 	
 	if(isEdit){
-		saveUrl="edit";
+		saveUrl="user/edit";
 		var rowData = $('#table').bootstrapTable('getSelections');
 		var dataJson = {
 				"userId":rowData[0].userId,
@@ -356,7 +356,7 @@ function save() {
 	            "roles":roles
 	        };
 	}else{
-		saveUrl="add";
+		saveUrl="user/add";
 		var dataJson = {
 				"username": $("#username").val(),
 				"password": $("#password").val(),
@@ -394,7 +394,7 @@ function save() {
 	}
 	
 	function deleteuser(){
-		var url="delete";
+		var url="user/delete";
 		var rowData = $('#table').bootstrapTable('getSelections');
 		var dataJson = {
 	            "userId": rowData[0].userId,
@@ -424,7 +424,7 @@ function save() {
 	}
 	
 	function treeinit(userId){
-		var url = "roletree"
+		var url = "user/roletree"
 		var dataJson = {
 	            "userId": userId,
 	     };
@@ -438,18 +438,16 @@ function save() {
 		
 	}
 	
-	
-	
-						    function rowStyle(row, index) {
-						        var classes = ['success', 'info', 'warning', 'danger'];
-						
-						        if (index % 2 === 0 ) {
-						            return {
-						                classes: classes[index/2%4]
-						            };
-						        }
-						        return {};
-						    }
+	function rowStyle(row, index) {
+        var classes = ['success', 'info', 'warning', 'danger'];
+
+        if (index % 2 === 0 ) {
+            return {
+                classes: classes[index/2%4]
+            };
+        }
+        return {};
+    }
 	</script>
 </body>
 

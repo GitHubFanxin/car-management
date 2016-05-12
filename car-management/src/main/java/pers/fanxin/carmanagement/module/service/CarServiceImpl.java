@@ -37,4 +37,9 @@ public class CarServiceImpl implements CarService{
 		return carDAO.getCarById(id);
 	}
 
+	@Override
+	public long findCount(String condition) {
+		return carDAO.findCount(condition);
+	}
+
 }

@@ -115,7 +115,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<li><a href="<%=basePath %>basedata/setting"><span
 					class="glyphicon glyphicon-user"></span> 设置 </a></li>
 		</ul>
-
 	</div>
 	<!--/.sidebar-->
 
@@ -123,19 +122,55 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="<%=basePath %>home"><span class="glyphicon glyphicon-home"></span></a></li>
-				<li class="active"> 主面板</li>
+				<li class="active">车辆管理</li>
 			</ol>
 		</div>
 		<!--/.row-->
 
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header"> 主面板</h1>
+				<h1 class="page-header">车辆管理</h1>
 			</div>
 		</div>
 		<!--/.row-->
 
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">车辆列表</div>
+					<div class="panel-body">
+						<form role="form" action="<%=basePath%>usecar/apply" method="post">
+							<div class="form-group">
+								<label>出发地</label>
+								<input class="form-control" name="startpoint" placeholder="出发地">
+							</div>
+							<div class="form-group">
+								<label>目的地</label>
+								<input class="form-control" name="destination" placeholder="目的地">
+							</div>
+							
+							<div class="checkbox">
+								<label>
+								<input type="checkbox" name="roundtrip" value=true>往返
+								</label>
+							</div>
+							
+							<div class="form-group">
+								<label>申请理由</label>
+								<textarea class="form-control" name="remark" rows="3"></textarea>
+							</div>
+							<button type="submit" class="btn btn-primary">提交</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/.row-->
+
+
 	</div>
+
 
 	<script src="<%=basePath%>static/js/jquery-1.11.1.min.js"></script>
 	<script src="<%=basePath%>static/js/bootstrap.min.js"></script>
@@ -146,6 +181,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="<%=basePath%>static/js/bootstrap-datepicker.js"></script>
 	<script src="<%=basePath%>static/js/bootstrap-table.js"></script>
 	<script src="<%=basePath%>static/js/custom.js"></script>
+	
 </body>
 
 </html>

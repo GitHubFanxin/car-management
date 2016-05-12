@@ -53,8 +53,8 @@ public class RoleDAOImpl extends BaseHibernateDAO<Role> implements RoleDAO{
 			hql = "from "+Role.class.getSimpleName();
 			return findByPage(hql, offset, pageSize);
 		}else{
-			hql = "from "+Role.class.getSimpleName()+" where roleName like ?";
-			return findByPage(hql, offset, pageSize, "%"+condition+"%");
+			hql = "from "+Role.class.getSimpleName()+" where roleName like ? or description like ?";
+			return findByPage(hql, offset, pageSize, "%"+condition+"%","%"+condition+"%");
 		}
 	}
 
@@ -66,8 +66,8 @@ public class RoleDAOImpl extends BaseHibernateDAO<Role> implements RoleDAO{
 			hql = "select count(*) from "+Role.class.getSimpleName();
 			l = find(hql);
 		}else{
-			hql = "select count(*) from "+Role.class.getSimpleName()+" where roleName like ?";
-			l = find(hql,"%"+condition+"%");
+			hql = "select count(*) from "+Role.class.getSimpleName()+" where roleName like ? or description like ?";
+			l = find(hql,"%"+condition+"%","%"+condition+"%");
 		}
 		if(l!=null&&l.size()==1){
 			return (Long)l.get(0);

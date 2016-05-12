@@ -63,7 +63,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</form>
 		<ul class="nav menu">
-			<li><a href="index.html"><span
+			<li><a href="<%=basePath %>home"><span
 					class="glyphicon glyphicon-dashboard"></span> 主面板</a></li>
 			<li class="parent"><a data-toggle="collapse" href="#sub-item-1">
 					<span class="glyphicon glyphicon-th"></span> 系统管理 <span
@@ -71,10 +71,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						class="glyphicon glyphicon-s glyphicon-plus"></em></span>
 			</a>
 				<ul class="children collapse" id="sub-item-1">
-					<li><a class="" href="<%=basePath %>manage/user/page"> <span
+					<li><a class="" href="<%=basePath %>basedata/user"> <span
 							class="glyphicon glyphicon-share-alt"></span> 用户管理
 					</a></li>
-					<li><a class="" href="<%=basePath %>manage/role/page"> <span
+					<li><a class="" href="<%=basePath %>basedata/role"> <span
 							class="glyphicon glyphicon-share-alt"></span> 角色管理
 					</a></li>
 				</ul></li>
@@ -84,52 +84,52 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						class="glyphicon glyphicon-s glyphicon-plus"></em></span>
 			</a>
 				<ul class="children collapse" id="sub-item-2">
-					<li><a class="" href="#"> <span
+					<li><a class="" href="<%=basePath %>manage/approve"> <span
+							class="glyphicon glyphicon-share-alt"></span> 用车审核
+					</a></li>
+					<li><a class="" href="<%=basePath %>manage/car"> <span
 							class="glyphicon glyphicon-share-alt"></span> 车辆管理
 					</a></li>
-					<li><a class="" href="#"> <span
-							class="glyphicon glyphicon-share-alt"></span> 审核用车
+					<li><a class="" href="<%=basePath %>manage/driver"> <span
+							class="glyphicon glyphicon-share-alt"></span> 司机管理
 					</a></li>
 				</ul></li>
 			<li class="parent"><a data-toggle="collapse" href="#sub-item-3">
-					<span class="glyphicon glyphicon-info-sign"></span> 公车使用 <span
+					<span class="glyphicon glyphicon-info-sign"></span> 申请用车 <span
 					class="icon pull-right"><em
 						class="glyphicon glyphicon-s glyphicon-plus"></em></span>
 			</a>
 				<ul class="children collapse" id="sub-item-3">
-					<li><a class="" href="#"> <span
+					<li><a class="" href="<%=basePath %>usecar/myapplication"> <span
+							class="glyphicon glyphicon-share-alt"></span> 我的用车记录
+					</a></li>
+					<li><a class="" href="<%=basePath %>usecar/apply"> <span
 							class="glyphicon glyphicon-share-alt"></span> 申请用车
 					</a></li>
-					<li><a class="" href="#"> <span
-							class="glyphicon glyphicon-share-alt"></span> 任务接受
-					</a></li>
 				</ul></li>
-
-			<li><a href="charts.html"><span
-					class="glyphicon glyphicon-stats"></span> 使用统计</a></li>
+			<li><a href="<%=basePath %>usecar/mymission"><span
+					class="glyphicon glyphicon-stats"></span> 我的任务 </a></li>
+			<li><a href="<%=basePath %>manage/report"><span
+					class="glyphicon glyphicon-stats"></span> 使用报表 </a></li>
 			<li role="presentation" class="divider"></li>
-			<li><a href="login.html"><span
-					class="glyphicon glyphicon-user"></span> Login Page</a></li>
+			<li><a href="<%=basePath %>basedata/setting"><span
+					class="glyphicon glyphicon-user"></span> 设置 </a></li>
 		</ul>
-		<div class="attribution">
-			Template by <a
-				href="http://www.medialoot.com/item/lumino-admin-bootstrap-template/">Medialoot</a>
-		</div>
 	</div>
 	<!--/.sidebar-->
 
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
 			<ol class="breadcrumb">
-				<li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
-				<li class="active">用户管理</li>
+				<li><a href="<%=basePath %>home"><span class="glyphicon glyphicon-home"></span></a></li>
+				<li class="active">车辆管理</li>
 			</ol>
 		</div>
 		<!--/.row-->
 
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">用户管理</h1>
+				<h1 class="page-header">车辆管理</h1>
 			</div>
 		</div>
 		<!--/.row-->
@@ -138,15 +138,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">用户列表</div>
+					<div class="panel-heading">车辆列表</div>
 					<div class="panel-body">
 						<div id="toolbar">
 							<button id="bt_add" class="btn btn-default" data-toggle="modal"
 								data-target="#myModal">添加</button>
-							<button id="bt_edit" disabled="true" class="btn btn-default"
+							<button id="bt_edit" disabled="disabled" class="btn btn-primary"
 								data-toggle="modal" data-target="#myModal">编辑</button>
-								<button id="bt_delete" disabled="true" class="btn btn-default"
+							<button id="bt_delete" disabled="disabled" class="btn btn-danger"
 								data-toggle="modal" data-target="#delete_modal">删除</button>
+							<button id="bt_forbid" disabled="disabled" class="btn btn-warning">禁用</button>
 						</div>
 						<table id="table"></table>
 					</div>
@@ -173,32 +174,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<input type="text" class="form-control" id="username"
-							placeholder="用户名">
-					</div>
-					<div class="form-group" id="password_div">
-						<input type="password" class="form-control" id="password"
-							placeholder="密码">
+						<input type="text" class="form-control" id="carNum"
+							placeholder="车辆编号">
 					</div>
 					<div class="form-group">
-						<input type="text" class="form-control" id="realname"
-							placeholder="姓名">
+						<input type="text" class="form-control" id="carName"
+							placeholder="车辆名称">
 					</div>
 					<div class="form-group">
-						<input type="text" class="form-control" id="department"
-							placeholder="部门">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="email"
-							placeholder="邮件">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="phone"
-							placeholder="电话">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" id="role"
-							placeholder="用户角色">
+						<input type="text" class="form-control" id="description"
+							placeholder="车辆描述">
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -208,8 +193,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</div>
 	</div>
-	
-	<!--Delete Modal -->
+<!--Delete Modal -->
 <div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -227,8 +211,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
         </div>
     </div>
-</div>	
-	
+</div>
 
 	<script src="<%=basePath%>static/js/jquery-1.11.1.min.js"></script>
 	<script src="<%=basePath%>static/js/bootstrap.min.js"></script>
@@ -254,37 +237,44 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				search:true,
 				clickToSelect:true,
 				toolbar:"#toolbar",
-				url: '<%=basePath%>manage/user/list',
+				url: "<%=basePath%>manage/car/list",
 				sidePagination: 'server',
 				columns: [{
 				checkbox:true
 				},{ 
-				field: "username",
-				title: "姓名",
-				sortable: true,
+					field: "carNum",
+					title: "车辆编号",
+					sortable: true,
+				},{ 
+					field: "carName",
+					title: "车辆名称"
 				},
 				{ 
-				field: "department",
-				title: "部门"
-				},{ 
-				field: "email",
-				title: "邮件"
-				},{ 
-				field: "phone",
-				title: "电话"
-				},{ 
-				field: "role",
-				title: "用户角色"
+					field: "state",
+					title: "车辆状态"
+				},{
+					field: "available",
+					title: "是否可用"
+				},{
+					field: "description",
+					title: "车辆描述"
 				}]
 			});
 
 			$('#table').on('check.bs.table',function(row,e){
 				$("#bt_edit").attr("disabled",false);
 				$("#bt_delete").attr("disabled",false);
+				$("#bt_forbid").attr("disabled",false);
+				if(e.available==="已启用"){
+					$("#bt_forbid").text("禁用").removeClass().addClass("btn btn-warning");
+				}else{
+					$("#bt_forbid").text("启用").removeClass().addClass("btn btn-success");
+				}
 			});
 			$('#table').on('uncheck.bs.table',function(row,e){
 				$("#bt_edit").attr("disabled",true);
 				$("#bt_delete").attr("disabled",true);
+				$("#bt_forbid").attr("disabled",true).text("禁用").removeClass().addClass("btn btn-warning");
 			});
 			
 			$("#bt_add").click(add);
@@ -293,12 +283,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				var rowData = $('#table').bootstrapTable('getSelections');
 				$("#delete_span").text(rowData[0].roleName);
 			});
-			$("#save").click(save);		
-			$("#delete").click(deleteuser);
+			$("#bt_forbid").click(forbid);
+			$("#delete").click(deleterole);
+			$("#save").click(save);			
 		});
 		
 		var isEdit=false;
-
+		
 $.postJSON = function(url,jsondata,callback){//JSON请求
 		return jQuery.ajax({
 			'type' : 'POST',
@@ -311,71 +302,84 @@ $.postJSON = function(url,jsondata,callback){//JSON请求
 	};
 
 function save() {
-	var saveUrl;
-	if(isEdit){
-		saveUrl="edit";
-		var rowData = $('#table').bootstrapTable('getSelections');
-		var dataJson = {
-				"username": $("#username").val(),
-	            "department": $("#department").val(),
-	            "email": $("#email").val(),
-	            "phone": $("#phone").val()
-	        };
-	}else{
-		saveUrl="add";
-		var dataJson = {
-				"username": $("#username").val(),
-	            "department": $("#department").val(),
-	            "email": $("#email").val(),
-	            "phone": $("#phone").val()
-	        };
-	}
-     $.postJSON(saveUrl,dataJson,function(result){
-		table.ajax.reload();
-		$("#myModal").modal("hide");
-	});
- }
+		var saveUrl;
+		if(isEdit){
+			saveUrl="car/edit";
+			var rowData = $('#table').bootstrapTable('getSelections');
+			var dataJson = {
+					"carId":rowData[0].carId,
+					"carNum":$("#carNum").val(),
+		            "carName": $("#carName").val(),
+		            "state":$("#state").val(),
+		            "description": $("#description").val()
+		        };
+		}else{
+			saveUrl="car/add";
+			var dataJson = {
+					"carNum":$("#carNum").val(),
+		            "carName": $("#carName").val(),
+		            "description": $("#description").val()
+		        };
+		}
+        $.postJSON(saveUrl,dataJson,function(result){
+        	$('#table').bootstrapTable('refresh');
+			$("#myModal").modal("hide");
+			$("#bt_edit").attr("disabled",true);
+			$("#bt_delete").attr("disabled",true);
+		});
+    }
 	
 	function add(){
 		isEdit=false;
-		$("#password_div").show();
 		$("#myModalLabel").text("新增");
-		$("#username").val("");
-		$("#department").val("");
-		$("#email").val("");
-		$("#phone").val("");
-		$("#role").val("");
+		$("#carNum").val("");
+        $("#carName").val("");
+        $("#description").val("");
 	}
 	
-	function deleteuser(){
-		var url="delete";
+	function deleterole(){
+		var url="car/delete";
 		var rowData = $('#table').bootstrapTable('getSelections');
 		var dataJson = {
-	            "userId": rowData[0].roleId,
+	            "carId": rowData[0].carId,
 	        };
 	        $.postJSON(url,dataJson,function(result){
 	        	$('#table').bootstrapTable('refresh');
 				$("#delete_modal").modal("hide");
+				$("#bt_edit").attr("disabled",true);
+				$("#bt_delete").attr("disabled",true);
+				$("#bt_forbid").attr("disabled",true);
+			});
+	}
+	
+	function forbid(){
+		var url="car/forbid";
+		var rowData = $('#table').bootstrapTable('getSelections');
+		var dataJson = {
+	            "carId": rowData[0].carId,
+	        };
+	        $.postJSON(url,dataJson,function(result){
+	        	$('#table').bootstrapTable('refresh');
+	        	$("#bt_edit").attr("disabled",true);
+				$("#bt_delete").attr("disabled",true);
+				$("#bt_forbid").attr("disabled",true);
 			});
 	}
 	
 	function edit(){
 		$("#myModalLabel").text("编辑");
-		$("#password_div").hide();
 		isEdit=true;
 		var rowData = $('#table').bootstrapTable('getSelections');
-		$("#username").val(rowData[0].username);
-		$("#department").val(rowData[0].department);
-		$("#email").val(rowData[0].email);
-		$("#phone").val(rowData[0].phone);
-		$("#role").val(rowData[0].role);
+		$("#carNum").val(rowData[0].carNum);
+        $("#carName").val(rowData[0].carName);
+        $("#description").val(rowData[0].description);
 	}
 						    function rowStyle(row, index) {
 						        var classes = ['success', 'info', 'warning', 'danger'];
 						
-						        if (index % 2 === 0 ) {
+						        if (index % 2 === 0) {
 						            return {
-						                classes: classes[index/2%4]
+						                classes: classes[index / 2 % 4]
 						            };
 						        }
 						        return {};

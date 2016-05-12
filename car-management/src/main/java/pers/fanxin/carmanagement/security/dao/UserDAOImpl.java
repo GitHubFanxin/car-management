@@ -61,11 +61,11 @@ public class UserDAOImpl extends BaseHibernateDAO<User> implements UserDAO{
 	public List<User> findUserByPage(int offset, int pageSize, String condition) {
 		String hql;
 		if(condition==""||condition==null){
-			hql = "from "+User.class.getSimpleName();
+			hql = "from "+User.class.getSimpleName()+" order by workNum";
 			return findByPage(hql, offset, pageSize);
 		}else{
-			hql = "from "+User.class.getSimpleName()+" where username like ? or department like ?";
-			return findByPage(hql, offset, pageSize, "%"+condition+"%","%"+condition+"%");
+			hql = "from "+User.class.getSimpleName()+" where username like ? or realname like ? or department like ? or workNum like ? order by workNum";
+			return findByPage(hql, offset, pageSize, "%"+condition+"%","%"+condition+"%","%"+condition+"%","%"+condition+"%");
 		}
 	}
 
@@ -77,8 +77,8 @@ public class UserDAOImpl extends BaseHibernateDAO<User> implements UserDAO{
 			hql = "select count(*) from "+User.class.getSimpleName();
 			l = find(hql);
 		}else{
-			hql = "select count(*) from "+User.class.getSimpleName()+" where username like ? or department like ?";
-			l = find(hql,"%"+condition+"%","%"+condition+"%");
+			hql = "select count(*) from "+User.class.getSimpleName()+" where username like ? or realname like ? or department like ? or workNum like ? ";
+			l = find(hql,"%"+condition+"%","%"+condition+"%","%"+condition+"%","%"+condition+"%");
 		}
 		if(l!=null&&l.size()==1){
 			return (Long)l.get(0);

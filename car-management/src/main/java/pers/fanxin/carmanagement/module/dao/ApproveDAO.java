@@ -10,5 +10,6 @@ public interface ApproveDAO extends BaseDAO<Approve>{
 	public void updateApprove(Approve approve);
 	public void deleteApprove(Approve approve);
 	public List<Approve> findApproveByPage(int offset, int pageSize, String condition);
+	public long findCount(String condition);
 	public Approve getApproveById(long id);
 }

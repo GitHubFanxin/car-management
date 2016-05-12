@@ -17,11 +17,10 @@ import pers.fanxin.carmanagement.security.service.UserService;
 import pers.fanxin.carmanagement.security.utils.UserHelper;
 
 @Component
-public class UserRealm extends AuthorizingRealm{
+public class UserRealm extends AuthorizingRealm {
 
 	private UserService userService;
-	
-	
+
 	public UserService getUserService() {
 		return userService;
 	}
@@ -31,29 +30,28 @@ public class UserRealm extends AuthorizingRealm{
 	}
 
 	@Override
-	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalls) {
-		String username = (String)principalls.getPrimaryPrincipal();
+	protected AuthorizationInfo doGetAuthorizationInfo(
+			PrincipalCollection principalls) {
+		String username = (String) principalls.getPrimaryPrincipal();
 		User user = userService.findUserByName(username);
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
 		authorizationInfo.setRoles(UserHelper.getUserRoleSet(user));
-		authorizationInfo.setStringPermissions(UserHelper.getUserPermissionsSet(user));
+		authorizationInfo.setStringPermissions(UserHelper
+				.getUserPermissionsSet(user));
 		return authorizationInfo;
 	}
 
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(
 			AuthenticationToken token) throws AuthenticationException {
-		String username = (String)token.getPrincipal();
+		String username = (String) token.getPrincipal();
 		User user = userService.findUserByName(username);
-		if(user==null){
+		if (user == null) {
 			throw new UnknownAccountException();
 		}
 		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-			user.getUsername(),
-			user.getPassword(),
-			ByteSource.Util.bytes(user.getCredentialSalt()),
-			getName()
-		);
+				user.getUsername(), user.getPassword(),
+				ByteSource.Util.bytes(user.getCredentialSalt()), getName());
 		return authenticationInfo;
 	}
 
