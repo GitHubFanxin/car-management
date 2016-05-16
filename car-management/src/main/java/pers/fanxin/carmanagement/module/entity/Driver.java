@@ -27,10 +27,7 @@ public class Driver {
 	private String workNum;
 	private String realname;
 	private String state="disable";
-	@OneToOne(targetEntity=RouteLog.class)
-	@JoinColumn(name="log_id",
-			referencedColumnName="log_id",unique=true)
-	private RouteLog currentRouteLog;
+
 	public long getDriverId() {
 		return driverId;
 	}
@@ -54,12 +51,6 @@ public class Driver {
 	}
 	public void setState(String state) {
 		this.state = state;
-	}
-	public RouteLog getCurrentRouteLog() {
-		return currentRouteLog;
-	}
-	public void setCurrentRouteLog(RouteLog currentRouteLog) {
-		this.currentRouteLog = currentRouteLog;
 	}
 	public String getWorkNum() {
 		return workNum;

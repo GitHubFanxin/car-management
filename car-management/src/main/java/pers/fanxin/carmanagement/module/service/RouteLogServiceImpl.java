@@ -58,6 +58,7 @@ public class RouteLogServiceImpl implements RouteLogService{
 		User passenger = getCurrentUser();
 		RouteLog routelog = routeLogDAO.findPassengerCurrentRoute(passenger.getUserId());
 		User driverUser = userDAO.getUserById(routelog.getPassengerId());
+		currentRoute.setRouteId(routelog.getLogId());
 		currentRoute.setPassengerName(passenger.getRealname());
 		currentRoute.setRoundtrip(routelog.isRoundtrip());
 		currentRoute.setPassengerPhone(passenger.getPhone());
@@ -76,20 +77,47 @@ public class RouteLogServiceImpl implements RouteLogService{
 		CurrentRouteVO currentRoute = new CurrentRouteVO();
 		User driverUser =  getCurrentUser();
 		RouteLog routelog = routeLogDAO.findDriverCurrentRoute(driverUser.getUserId());
-		User passenger = userDAO.getUserById(routelog.getPassengerId());
-		currentRoute.setPassengerName(passenger.getRealname());
-		currentRoute.setRoundtrip(routelog.isRoundtrip());
-		currentRoute.setPassengerPhone(passenger.getPhone());
-		currentRoute.setDriverName(driverUser.getRealname());
-		currentRoute.setDriverPhone(driverUser.getPhone());
-		currentRoute.setDestination(routelog.getDestination());
-		currentRoute.setStartpoint(routelog.getStartpoint());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-		if(routelog.getStartDate()!=null)
-			currentRoute.setDate(sdf.format(routelog.getStartDate()));
-		return currentRoute;
+		if(routelog!=null){
+			User passenger = userDAO.getUserById(routelog.getPassengerId());
+			currentRoute.setRouteId(routelog.getLogId());
+			currentRoute.setPassengerName(passenger.getRealname());
+			currentRoute.setRoundtrip(routelog.isRoundtrip());
+			currentRoute.setPassengerPhone(passenger.getPhone());
+			currentRoute.setDriverName(driverUser.getRealname());
+			currentRoute.setDriverPhone(driverUser.getPhone());
+			currentRoute.setDestination(routelog.getDestination());
+			currentRoute.setStartpoint(routelog.getStartpoint());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+			if(routelog.getStartDate()!=null)
+				currentRoute.setDate(sdf.format(routelog.getStartDate()));
+			return currentRoute;
+		}
+		return null;
 	}
 
+	@Override
+	public List<RouteLog> findCurrentDriverRouteLog(int offset,
+			int pageSize) {
+		User driverUser =  getCurrentUser();
+		return routeLogDAO.findRouteLogByDriverId(driverUser.getUserId(), offset, pageSize);
+	}
 
+	@Override
+	public long findCurrentDriverRouteLogCount() {
+		User driverUser =  getCurrentUser();
+		return routeLogDAO.findCountByDriverId(driverUser.getUserId());
+	}
 
+	@Override
+	public List<RouteLog> findCurrentPassengerRouteLog(int offset,
+			int pageSize) {
+		User passengerUser =  getCurrentUser();
+		return routeLogDAO.findRouteLogByPassengerId(passengerUser.getUserId(), offset, pageSize);
+	}
+
+	@Override
+	public long findCurrentPassengerRouteLogCount() {
+		User passengerUser =  getCurrentUser();
+		return routeLogDAO.findCountByPassengerId(passengerUser.getUserId());
+	}
 }

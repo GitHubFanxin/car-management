@@ -1,5 +1,6 @@
 package pers.fanxin.carmanagement.module.web;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,12 +46,18 @@ public class ApplicationController {
 	}
 	
 	@RequestMapping(value = "/apply",method = RequestMethod.POST)
-	public Object carAdd(String startpoint, String destination, boolean roundtrip, String remark){
+	public Object carAdd(String startpoint, String destination, boolean roundtrip, String remark, String date){
 		Application application = new Application();
 		application.setStartpoint(startpoint);
 		application.setDestination(destination);
 		application.setRoundtrip(roundtrip);
 		application.setRemark(remark);
+		try {
+			application.setStartDate(sdf.parse(date));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if(applicationService.createApplication(application)>0){
 			return "redirect:myapplication";
 		}

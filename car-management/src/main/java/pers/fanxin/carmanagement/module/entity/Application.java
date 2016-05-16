@@ -25,6 +25,7 @@ public class Application {
 	private String startpoint;
 	private boolean roundtrip;
 	private Date applyDate;
+	private Date startDate;
 	private Long applicantId;
 	private String applicantName;//申请人
 	private String remark;
@@ -104,5 +105,11 @@ public class Application {
 	}
 	public void setApprove(Approve approve) {
 		this.approve = approve;
+	}
+	public Date getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 }

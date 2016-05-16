@@ -1,6 +1,7 @@
 package pers.fanxin.carmanagement.module.vo;
 
 public class CurrentRouteVO {
+	private long routeId;
 	private String startpoint;
 	private String destination;
 	private boolean roundtrip;
@@ -56,6 +57,12 @@ public class CurrentRouteVO {
 	}
 	public void setDriverPhone(String driverPhone) {
 		this.driverPhone = driverPhone;
+	}
+	public long getRouteId() {
+		return routeId;
+	}
+	public void setRouteId(long routeId) {
+		this.routeId = routeId;
 	}
 
 }

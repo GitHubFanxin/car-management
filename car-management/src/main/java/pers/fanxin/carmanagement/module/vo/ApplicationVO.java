@@ -14,9 +14,10 @@ public class ApplicationVO {
 	private String applicantName;//申请人
 	private String remark;
 	private String state;
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	
 	
 	public ApplicationVO(Application application){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		this.applicationId = application.getApplicationId();
 		this.destination = application.getDestination();
 		this.startpoint = application.getStartpoint();

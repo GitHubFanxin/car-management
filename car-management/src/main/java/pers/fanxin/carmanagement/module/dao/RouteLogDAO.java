@@ -40,4 +40,17 @@ public interface RouteLogDAO extends BaseDAO<RouteLog>{
 	public RouteLog findPassengerCurrentRoute(long userId);
 	
 	public RouteLog findDriverCurrentRoute(long userId);
+	
+	/** 过得对应用户（乘客）的所有行程
+	 * @param id 用户id，userid
+	 * @return   
+	 * Approve
+	 */
+	public List<RouteLog> findRouteLogByPassengerId(long id,int offset, int pageSize);
+	/** 过得对应用户（乘客）的所有行程数量
+	 * @param id 用户id，userid
+	 * @return   
+	 * Approve
+	 */
+	public long findCountByPassengerId(long id);
 }

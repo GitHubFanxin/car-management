@@ -50,13 +50,13 @@ public class RouteLogDAOImpl extends BaseHibernateDAO<RouteLog>
 
 	@Override
 	public List<RouteLog> findRouteLogByDriverId(long id, int offset, int pageSize) {
-		String hql = "from RouteLog r where driverId=? and r.state='wait'";
+		String hql = "from RouteLog r where driverId=?";
 		return findByPage(hql, offset, pageSize,id);
 	}
 
 	@Override
 	public long findCountByDriverId(long id) {
-		String hql = "select count(*) from Approve where driverId=?";
+		String hql = "select count(*) from RouteLog where driverId=?";
 		List<?> l = find(hql,id);
 		if(l!=null&&l.size()==1){
 			return (Long)l.get(0);
@@ -100,6 +100,23 @@ public class RouteLogDAOImpl extends BaseHibernateDAO<RouteLog>
 			return routeLogs.get(0);
 		}
 		return null;
+	}
+
+	@Override
+	public List<RouteLog> findRouteLogByPassengerId(long id, int offset,
+			int pageSize) {
+		String hql = "from RouteLog r where passengerId=? ";
+		return findByPage(hql, offset, pageSize,id);
+	}
+
+	@Override
+	public long findCountByPassengerId(long id) {
+		String hql = "select count(*) from RouteLog where passengerId=?";
+		List<?> l = find(hql,id);
+		if(l!=null&&l.size()==1){
+			return (Long)l.get(0);
+		}
+		return 0;
 	}
 
 	

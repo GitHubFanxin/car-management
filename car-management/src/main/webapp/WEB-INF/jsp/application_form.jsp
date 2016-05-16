@@ -65,6 +65,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<ul class="nav menu">
 			<li><a href="<%=basePath %>home"><span
 					class="glyphicon glyphicon-dashboard"></span> 主面板</a></li>
+			<shiro:hasAnyRoles name="admin">
 			<li class="parent"><a data-toggle="collapse" href="#sub-item-1">
 					<span class="glyphicon glyphicon-th"></span> 系统管理 <span
 					class="icon pull-right"><em
@@ -78,6 +79,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							class="glyphicon glyphicon-share-alt"></span> 角色管理
 					</a></li>
 				</ul></li>
+			</shiro:hasAnyRoles>
+			
+			<shiro:hasAnyRoles name="admin,approver">
 			<li class="parent"><a data-toggle="collapse" href="#sub-item-2">
 					<span class="glyphicon glyphicon-pencil"></span> 公车管理 <span
 					class="icon pull-right"><em
@@ -94,24 +98,50 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							class="glyphicon glyphicon-share-alt"></span> 司机管理
 					</a></li>
 				</ul></li>
+			</shiro:hasAnyRoles>
+			
+			<shiro:hasAnyRoles name="user">
 			<li class="parent"><a data-toggle="collapse" href="#sub-item-3">
-					<span class="glyphicon glyphicon-info-sign"></span> 申请用车 <span
+					<span class="glyphicon glyphicon-info-sign"></span> 公车使用 <span
 					class="icon pull-right"><em
 						class="glyphicon glyphicon-s glyphicon-plus"></em></span>
 			</a>
 				<ul class="children collapse" id="sub-item-3">
-					<li><a class="" href="<%=basePath %>usecar/myapplication"> <span
-							class="glyphicon glyphicon-share-alt"></span> 我的用车记录
-					</a></li>
 					<li><a class="" href="<%=basePath %>usecar/apply"> <span
 							class="glyphicon glyphicon-share-alt"></span> 申请用车
 					</a></li>
+					<li><a class="" href="<%=basePath %>usecar/myapplication"> <span
+							class="glyphicon glyphicon-share-alt"></span> 我的申请记录
+					</a></li>
+					<li><a class="" href="<%=basePath %>usecar/history"> <span
+							class="glyphicon glyphicon-share-alt"></span> 我的用车记录
+					</a></li>
 				</ul></li>
-			<li><a href="<%=basePath %>driver/task"><span
-					class="glyphicon glyphicon-stats"></span> 我的任务 </a></li>
+			</shiro:hasAnyRoles>
+				
+			<shiro:hasAnyRoles name="driver">
+			<li class="parent"><a data-toggle="collapse" href="#sub-item-4">
+					<span class="glyphicon glyphicon-info-sign"></span> 我的任务<span
+					class="icon pull-right"><em
+						class="glyphicon glyphicon-s glyphicon-plus"></em></span>
+			</a>
+				<ul class="children collapse" id="sub-item-4">
+					<li><a class="" href="<%=basePath %>driver/mytask"> <span
+							class="glyphicon glyphicon-share-alt"></span> 新的任务
+					</a></li>
+					<li><a class="" href="#"> <span
+							class="glyphicon glyphicon-share-alt"></span> 我的任务记录
+					</a></li>
+				</ul></li>
+			</shiro:hasAnyRoles>
+			
+			<shiro:hasAnyRoles name="admin">
 			<li><a href="<%=basePath %>manage/report"><span
 					class="glyphicon glyphicon-stats"></span> 使用报表 </a></li>
+			</shiro:hasAnyRoles>
+			
 			<li role="presentation" class="divider"></li>
+			
 			<li><a href="<%=basePath %>basedata/setting"><span
 					class="glyphicon glyphicon-user"></span> 设置 </a></li>
 		</ul>
@@ -148,6 +178,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<div class="form-group">
 								<label>目的地</label>
 								<input class="form-control" name="destination" placeholder="目的地">
+							</div>
+							<div class="form-group">
+								<label>出发时间</label>
+								<input class="form-control" name="date" placeholder="出发时间">
 							</div>
 							
 							<div class="checkbox">

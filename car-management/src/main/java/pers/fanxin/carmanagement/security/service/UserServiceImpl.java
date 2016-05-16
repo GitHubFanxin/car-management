@@ -78,7 +78,12 @@ public class UserServiceImpl implements UserService{
 			Role role = roleDAO.getRoleByName(roleName);
 			roles.add(role);
 		}
-		user.setRole(roles);
+		
+		if(!roles.isEmpty()){
+			user.setRole(roles);
+		}else{
+			user.setRole(null);
+		}
 		userDAO.updateUser(user);
 		if(!RoleString.contains("driver")){
 			unbindDriver(user);

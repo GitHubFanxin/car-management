@@ -14,7 +14,6 @@ public interface DriverService {
 	public long findCount(String condition);
 	public Driver getDriverByDriverId(long id);
 	public Driver getDriverByUserId(long id);
-	public CurrentRouteVO getCurrentRoute();
 	/**
 	 * 当前司机开始（接受）任务
 	 *    

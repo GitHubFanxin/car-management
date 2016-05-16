@@ -39,6 +39,12 @@ public class DriverController {
 		return "myTask";
 	}
 	
+	@RequestMapping("/driver/currentTask")
+	String currentTaskPage(){
+		SecurityUtils.getSubject().checkRole("driver");
+		return "currentTask";
+	}
+	
 	@RequestMapping("/driver/list")
 	@ResponseBody
 	public Object driverList(HttpServletRequest request, int limit, int offset, String search){
@@ -94,9 +100,16 @@ public class DriverController {
 		return "{}";
 	}
 	
-	@RequestMapping("/driver/getCurrentTask")
+	@RequestMapping("/driver/currentRoute")
 	@ResponseBody
 	public Object currentTask(){
 		return routeLogService.findDriverCurrentRoute();
+	}
+	
+	@RequestMapping("/driver/completeTask")
+	@ResponseBody
+	public Object completeTask(){
+		driverService.driveEnd(200.0);
+		return "{}";
 	}
 }

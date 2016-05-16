@@ -1,6 +1,5 @@
 package pers.fanxin.carmanagement.module.service;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import pers.fanxin.carmanagement.module.dao.DriverDAO;
 import pers.fanxin.carmanagement.module.dao.RouteLogDAO;
 import pers.fanxin.carmanagement.module.entity.Driver;
 import pers.fanxin.carmanagement.module.entity.RouteLog;
-import pers.fanxin.carmanagement.module.vo.CurrentRouteVO;
 import pers.fanxin.carmanagement.security.dao.UserDAO;
 import pers.fanxin.carmanagement.security.entity.User;
 
@@ -65,10 +63,10 @@ public class DriverServiceImpl implements DriverService{
 	@Override
 	public void driveAccept(long routeLogId) {
 		Driver driver = driverDAO.getDriverByUserId(getCurrentUser().getUserId());
-		if(driver.getCurrentRouteLog()==null){
+		
+		if(routeLogDAO.findDriverCurrentRoute(driver.getUserId())==null){
 			RouteLog routeLog = routeLogDAO.getRouteLogById(routeLogId);
 			routeLog.setState("inprogress");
-			driver.setCurrentRouteLog(routeLog);
 			driver.setState("working");
 			driverDAO.update(driver);
 		}
@@ -77,15 +75,12 @@ public class DriverServiceImpl implements DriverService{
 	@Override
 	public void driveEnd(double cost) {
 		Driver driver = driverDAO.getDriverByUserId(getCurrentUser().getUserId());
-		RouteLog routeLog = driver.getCurrentRouteLog();
-		
+		RouteLog routeLog = routeLogDAO.findDriverCurrentRoute(driver.getUserId());
 		routeLog.setState("completed");
 		routeLog.setCost(cost);
 		routeLog.setEndDate(new Date());
 		routeLogDAO.update(routeLog);
-		
 		driver.setState("free");
-		driver.setCurrentRouteLog(null);
 		driverDAO.update(driver);
 	}
 
@@ -117,27 +112,4 @@ public class DriverServiceImpl implements DriverService{
 		User driver = getCurrentUser();
 		return routeLogDAO.findCountByDriverId(driver.getUserId());
 	}
-
-	@Override
-	public CurrentRouteVO getCurrentRoute() {
-		CurrentRouteVO currentRoute = new CurrentRouteVO();
-		User driverUser = getCurrentUser();
-		Driver driver = this.getDriverByUserId(driverUser.getUserId());
-		RouteLog routelog = driver.getCurrentRouteLog();
-		User passenger = userDAO.getUserById(routelog.getPassengerId());
-		currentRoute.setPassengerName(passenger.getRealname());
-		currentRoute.setRoundtrip(routelog.isRoundtrip());
-		currentRoute.setPassengerPhone(passenger.getPhone());
-		currentRoute.setDriverName(driverUser.getRealname());
-		currentRoute.setDriverPhone(driverUser.getPhone());
-		currentRoute.setDestination(routelog.getDestination());
-		currentRoute.setStartpoint(routelog.getStartpoint());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-		if(routelog.getStartDate()!=null)
-			currentRoute.setDate(sdf.format(routelog.getStartDate()));
-		return currentRoute;
-	}
-
-	
-	
 }

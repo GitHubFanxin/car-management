@@ -115,6 +115,7 @@ public class ApproveServiceImpl implements ApproveService{
 			routeLog.setStartpoint(application.getStartpoint());
 			routeLog.setDestination(application.getDestination());
 			routeLog.setRoundtrip(application.isRoundtrip());
+			routeLog.setStartDate(application.getStartDate());
 			
 			application.setApprove(approve);
 			application.setRouteLog(routeLog);

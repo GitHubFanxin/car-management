@@ -13,5 +13,10 @@ public interface RouteLogService {
 	public List<RouteLog> findRouteLogsByPage(int offset, int pageSize, String condition);
 	public CurrentRouteVO findPassengerCurrentRoute();
 	public CurrentRouteVO findDriverCurrentRoute();
-
+	
+	public List<RouteLog> findCurrentDriverRouteLog(int offset, int pageSize);
+	public long findCurrentDriverRouteLogCount();
+	
+	public List<RouteLog> findCurrentPassengerRouteLog(int offset, int pageSize);
+	public long findCurrentPassengerRouteLogCount();
 }

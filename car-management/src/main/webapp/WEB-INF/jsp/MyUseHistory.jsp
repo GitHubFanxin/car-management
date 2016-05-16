@@ -152,35 +152,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="<%=basePath %>home"><span class="glyphicon glyphicon-home"></span></a></li>
-				<li class="active">我的任务</li>
+				<li class="active">公车使用</li>
 			</ol>
 		</div>
 		<!--/.row-->
 
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">我的任务</h1>
+				<h1 class="page-header">公车使用</h1>
 			</div>
 		</div>
 		<!--/.row-->
-
 
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">当前任务</div>
+					<div class="panel-heading">我的申请记录</div>
 					<div class="panel-body">
-						<p id="task"></p>
+						<div id="toolbar">
+							<button id="bt_add" class="btn btn-default"  onclick="window.location.href('<%=basePath %>usecar/apply">添加</button>
+						</div>
+						<table id="table"></table>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!--/.row-->
-
 
 	</div>
-	<!--/.main-->
-
 
 	<script src="<%=basePath%>static/js/jquery-1.11.1.min.js"></script>
 	<script src="<%=basePath%>static/js/bootstrap.min.js"></script>
@@ -192,35 +190,68 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="<%=basePath%>static/js/bootstrap-table.js"></script>
 	<script src="<%=basePath%>static/js/custom.js"></script>
 	<script>
-	$(function(){
-		initCurrentTask();
-	});
 	
-	function initCurrentTask(){
-		$.ajax({
-			'type' : 'post',
-			'url' : 'driver/currentRoute',
-			'success' : function(result){
-				var taskPreviewHtml = "";
-				if(result!=null&&result!=""){
-					taskPreviewHtml = taskPreviewHtml + "<p><b>"+result.startpoint+
-					"</b> --- <b>"+result.destination+"</b></p>";
-				if(result.roundtrip===true){
-					taskPreviewHtml = taskPreviewHtml+"<p>往返</p>";
-				}else{
-					taskPreviewHtml = taskPreviewHtml+"<p>单程</p>";
-				}
-				taskPreviewHtml = taskPreviewHtml+
-					"<p>乘客：<b>"+result.passengerName+"</b></p>"+
-					"<p>"+result.date+"</p>"+
-					"<p>"+result.passengerPhone+"</p>";
-				}else{
-					taskPreviewHtml = "当前没有接受任何任务"
-				}
-				$('#taskpreview').html(taskPreviewHtml);
-			}
+		$(function(){
+			$('#table').bootstrapTable({
+				method:"post",
+				contentType:"application/x-www-form-urlencoded",
+				pagination:true,
+				showToggle:true,
+				showRefresh:true,
+				showColumns:true,
+				singleSelect:true,
+				rowStyle: rowStyle,
+				search:true,
+				clickToSelect:true,
+				toolbar:"#toolbar",
+				url: "<%=basePath%>usecar/history/list",
+				sidePagination: 'server',
+				columns: [{
+				checkbox:true
+				},{ 
+					field: "logId",
+					title: "记录编号",
+					sortable: true,
+				},{ 
+					field: "startpoint",
+					title: "出发地"
+				},{ 
+					field: "destination",
+					title: "目的地"
+				},{
+					field: "roundtrip",
+					title: "往返"
+				},{
+					field: "applyDate",
+					title: "申请日期"
+				},{
+					field: "driver",
+					title: "司机"
+				},{
+					field: "cost",
+					title: "费用"
+				},{
+					field: "startDate",
+					title: "开始时间"
+				},{
+					field: "endDate",
+					title: "完成时间"
+				},{
+					field: "state",
+					title: "状态"
+				}]
+			});
 		});
-	}
+		 function rowStyle(row, index) {
+		        var classes = ['success', 'info', 'warning', 'danger'];
+		
+		        if (index % 2 === 0) {
+		            return {
+		                classes: classes[index / 2 % 4]
+		            };
+		        }
+		        return {};
+		    }
 	</script>
 </body>
 
