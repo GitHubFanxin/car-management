@@ -20,6 +20,7 @@ import pers.fanxin.carmanagement.module.entity.Approve;
 import pers.fanxin.carmanagement.module.service.ApplicationService;
 import pers.fanxin.carmanagement.module.service.ApproveService;
 import pers.fanxin.carmanagement.module.vo.ApplicationVO;
+import pers.fanxin.carmanagement.module.vo.PassMsgVO;
 
 @Controller
 @RequestMapping("/manage")
@@ -48,13 +49,21 @@ public class ApproveController {
 		return page;
 	}
 	
+//	@RequestMapping("/approve/pass")
+//	@ResponseBody
+//	public Object pass(@RequestBody ArrayList<ApplicationVO> applications){
+//		SecurityUtils.getSubject().checkRole("approver");
+//		for(ApplicationVO application : applications){
+//			approveService.approve(application.getApplicationId());
+//		}
+//		return "{'state':success'}";
+//	}
+	
 	@RequestMapping("/approve/pass")
 	@ResponseBody
-	public Object pass(@RequestBody ArrayList<ApplicationVO> applications){
+	public Object pass(@RequestBody PassMsgVO msg){
 		SecurityUtils.getSubject().checkRole("approver");
-		for(ApplicationVO application : applications){
-			approveService.approve(application.getApplicationId());
-		}
+		approveService.approve(msg.getApplicationId(), msg.getCarId(), msg.getDriverId());
 		return "{'state':success'}";
 	}
 	

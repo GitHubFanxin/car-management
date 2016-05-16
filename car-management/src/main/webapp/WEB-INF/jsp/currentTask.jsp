@@ -122,33 +122,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="<%=basePath %>home"><span class="glyphicon glyphicon-home"></span></a></li>
-				<li class="active">公车使用</li>
+				<li class="active">我的任务</li>
 			</ol>
 		</div>
 		<!--/.row-->
 
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">公车使用</h1>
+				<h1 class="page-header">我的任务</h1>
 			</div>
 		</div>
 		<!--/.row-->
 
+
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">我的申请记录</div>
+					<div class="panel-heading">任务列表</div>
 					<div class="panel-body">
-						<div id="toolbar">
-							<button id="bt_add" class="btn btn-default"  onclick="window.location.href('<%=basePath %>usecar/apply">添加</button>
-						</div>
-						<table id="table"></table>
+						
 					</div>
 				</div>
 			</div>
 		</div>
+		<!--/.row-->
+
 
 	</div>
+	<!--/.main-->
+
 
 	<script src="<%=basePath%>static/js/jquery-1.11.1.min.js"></script>
 	<script src="<%=basePath%>static/js/bootstrap.min.js"></script>
@@ -162,54 +164,44 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script>
 	
 		$(function(){
-			$('#table').bootstrapTable({
-				method:"post",
-				contentType:"application/x-www-form-urlencoded",
-				pagination:true,
-				showToggle:true,
-				showRefresh:true,
-				showColumns:true,
-				singleSelect:true,
-				rowStyle: rowStyle,
-				search:true,
-				clickToSelect:true,
-				toolbar:"#toolbar",
-				url: "<%=basePath%>usecar/myapplication/list",
-				sidePagination: 'server',
-				columns: [{
-				checkbox:true
-				},{ 
-					field: "applicationId",
-					title: "申请编号",
-					sortable: true,
-				},{ 
-					field: "startpoint",
-					title: "出发地"
-				},{ 
-					field: "destination",
-					title: "目的地"
-				},{
-					field: "roundtrip",
-					title: "往返"
-				},{
-					field: "applyDate",
-					title: "申请日期"
-				},{
-					field: "state",
-					title: "状态"
-				}]
+			$('#table').on('check.bs.table',function(row,e){
+				$("#btn_accept").attr("disabled",false);
 			});
+			$('#table').on('uncheck.bs.table',function(row,e){
+				$("#btn_accept").attr("disabled",true);
+			});
+			$("#btn_accept").click(accept);	
 		});
-		 function rowStyle(row, index) {
-		        var classes = ['success', 'info', 'warning', 'danger'];
-		
-		        if (index % 2 === 0) {
-		            return {
-		                classes: classes[index / 2 % 4]
-		            };
-		        }
-		        return {};
-		    }
+	
+	$.postJSON = function(url,jsondata,callback){//JSON请求
+		return jQuery.ajax({
+			'type' : 'POST',
+			'url' : url,
+			'contentType' : 'application/json',
+			'data' : JSON.stringify(jsondata),
+			'dataType' : 'json',
+			'success' : callback
+		});
+	};
+	
+	$.postData = function(url,data,callback){
+		return $.ajax({
+			'type' : 'post',
+			'url' : url,
+			'data' : data,
+			'success' : callback
+		});
+	};
+	function accept(){
+		var rowData = $('#table').bootstrapTable('getSelections');
+		var data = {
+				"logId":rowData[0].logId
+		};
+		$.postData("accept",data,function(result){
+			$('#table').bootstrapTable('refresh');
+		});
+	}
+		    
 	</script>
 </body>
 

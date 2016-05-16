@@ -107,7 +107,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							class="glyphicon glyphicon-share-alt"></span> 申请用车
 					</a></li>
 				</ul></li>
-			<li><a href="<%=basePath %>usecar/mymission"><span
+			<li><a href="<%=basePath %>driver/mytask"><span
 					class="glyphicon glyphicon-stats"></span> 我的任务 </a></li>
 			<li><a href="<%=basePath %>manage/report"><span
 					class="glyphicon glyphicon-stats"></span> 使用报表 </a></li>
@@ -140,13 +140,59 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<div class="panel-heading">用车申请管理</div>
 					<div class="panel-body">
 						<div id="toolbar">
-							<button id="bt_pass" class="btn btn-primary" disabled="disabled">通过</button>
+							<button id="btn_check" class="btn btn-primary" disabled="disabled"
+								data-toggle="modal" data-target="#driverModal">审核</button>
 						</div>
 						<table id="table"></table>
 					</div>
 				</div>
 			</div>
 		</div>
+		
+			<!-- Modal -->
+	<div class="modal fade" id="driverModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">审核 选择司机</h4>
+				</div>
+				<div class="modal-body">
+					<table id="driverTable"></table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" id="btn_driverOk" disabled="disabled"
+						data-toggle="modal" data-target="#carModal">确认</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="carModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">审核 选择车辆</h4>
+				</div>
+				<div class="modal-body">
+					<table id="carTable"></table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" id="btn_pass" disabled="disabled">确认</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	</div>
 
@@ -169,7 +215,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				showToggle:true,
 				showRefresh:true,
 				showColumns:true,
-
+				singleSelect:true,
 				rowStyle: rowStyle,
 				search:true,
 				clickToSelect:true,
@@ -202,12 +248,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					title: "状态"
 				}]
 			});
-			$('#bt_pass').click(pass);
+			//$('#btn_check').click(pass);
+			$('#btn_check').click(driverTableInit);
+			$('#btn_driverOk').click(carTableInit);
+			$('#btn_pass').click(pass);
 			$('#table').on('check.bs.table',function(row,e){
-				$("#bt_pass").attr("disabled",false);
+				$("#btn_check").attr("disabled",false);
 			});
 			$('#table').on('uncheck.bs.table',function(row,e){
-				$("#bt_pass").attr("disabled",true);
+				$("#btn_check").attr("disabled",true);
 			});
 		});
 		
@@ -222,19 +271,114 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			});
 		};
 		
+		var selectedDriverId;
+		var selectedCarId;
+		
 		function pass(){
-			var rowData = $('#table').bootstrapTable('getSelections');
-			var json = [];
-			for(var i=0;i<rowData.length;i++){
-				var node = {"applicationId":rowData[i].applicationId};
-				json.push(node);
+			var applicationData = $('#table').bootstrapTable('getSelections');
+			var driverData = $('#driverTable').bootstrapTable('getSelections');
+			var carData = $('#carTable').bootstrapTable('getSelections');
+			var json = {
+					"applicationId" : applicationData[0].applicationId,
+					"driverId" : driverData[0].driverId,
+					"carId" : carData[0].carId
 			}
 			url = "approve/pass";
 			 $.postJSON(url,json,function(result){
-		        	$('#table').bootstrapTable('refresh');
+				 $("#driverModal").modal("hide");
+				 $("#carModal").modal("hide");
 					$("#bt_pass").attr("disabled",true);
 				});
 		}
+		
+		function saveDriver(){
+			var rowData = $('#driverTable').bootstrapTable('getSelections');
+			selectedDriverId = rowData[0].driverId;
+		}
+		
+		function saveCar(){
+			var rowData = $('#carTable').bootstrapTable('getSelections');
+			selectedDriverId = rowData[0].carId;
+		}
+		
+		function driverTableInit(){
+			$('#driverTable').bootstrapTable({
+				method:"post",
+				contentType:"application/x-www-form-urlencoded",
+				pagination:true,
+				showToggle:true,
+				showRefresh:true,
+				showColumns:true,
+				singleSelect:true,
+				rowStyle: rowStyle,
+				search:true,
+				clickToSelect:true,
+				url: '<%=basePath%>driver/list',
+				sidePagination: 'server',
+				columns: [{
+				checkbox:true
+				},{ 
+					field: "workNum",
+					title: "工号",
+					sortable: true,
+				},{ 
+					field: "realname",
+					title: "姓名",
+					sortable: true,
+				},{ 
+					field: "state",
+					title: "状态"
+				}]
+			});
+			$('#driverTable').on('check.bs.table',function(row,e){
+				$("#btn_driverOk").attr("disabled",false);
+			});
+			$('#driverTable').on('uncheck.bs.table',function(row,e){
+				$("#btn_driverOk").attr("disabled",true);
+			});
+		}
+		
+		function carTableInit(){
+			$('#carTable').bootstrapTable({
+				method:"post",
+				contentType:"application/x-www-form-urlencoded",
+				pagination:true,
+				showToggle:true,
+				showRefresh:true,
+				showColumns:true,
+				singleSelect:true,
+				rowStyle: rowStyle,
+				search:true,
+				clickToSelect:true,
+				url: '<%=basePath%>manage/car/list',
+				sidePagination: 'server',
+				columns: [{
+				checkbox:true
+				},{ 
+					field: "carNum",
+					title: "车辆编号",
+					sortable: true,
+				},{ 
+					field: "carName",
+					title: "车辆名称"
+				},
+				{ 
+					field: "state",
+					title: "车辆状态"
+				},{
+					field: "available",
+					title: "是否可用"
+				}]
+			});
+			$('#carTable').on('check.bs.table',function(row,e){
+				$("#btn_pass").attr("disabled",false);
+			});
+			$('#carTable').on('uncheck.bs.table',function(row,e){
+				$("#btn_pass").attr("disabled",true);
+			});
+		}
+		
+		
 		
 		function rowStyle(row, index) {
 	        var classes = ['success', 'info', 'warning', 'danger'];

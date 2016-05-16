@@ -107,7 +107,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							class="glyphicon glyphicon-share-alt"></span> 申请用车
 					</a></li>
 				</ul></li>
-			<li><a href="<%=basePath %>usecar/mymission"><span
+			<li><a href="<%=basePath %>driver/task"><span
 					class="glyphicon glyphicon-stats"></span> 我的任务 </a></li>
 			<li><a href="<%=basePath %>manage/report"><span
 					class="glyphicon glyphicon-stats"></span> 使用报表 </a></li>

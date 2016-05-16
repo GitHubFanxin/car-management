@@ -11,4 +11,33 @@ public interface RouteLogDAO extends BaseDAO<RouteLog>{
 	public void deleteRouteLog(RouteLog routeLog);
 	public RouteLog getRouteLogById(long id);
 	public List<RouteLog> findRouteLogsByPage(int offset, int pageSize, String condition);
+	
+	/** 过得对应用户（司机）的所有行程
+	 * @param id 用户id，userid
+	 * @return   
+	 * Approve
+	 */
+	public List<RouteLog> findRouteLogByDriverId(long id,int offset, int pageSize);
+	/** 过得对应用户（司机）的所有行程数量
+	 * @param id 用户id，userid
+	 * @return   
+	 * Approve
+	 */
+	public long findCountByDriverId(long id);
+	/** 过得对应用户（司机）的所有新行程
+	 * @param id 用户id，userid
+	 * @return   
+	 * Approve
+	 */
+	public List<RouteLog> findNewRouteLogByDriverId(long id,int offset, int pageSize);
+	/** 过得对应用户（司机）的所有新行程表数量
+	 * @param id 用户id，userid
+	 * @return   
+	 * Approve
+	 */
+	public long findNewCountByDriverId(long id);
+	
+	public RouteLog findPassengerCurrentRoute(long userId);
+	
+	public RouteLog findDriverCurrentRoute(long userId);
 }

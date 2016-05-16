@@ -48,4 +48,59 @@ public class RouteLogDAOImpl extends BaseHibernateDAO<RouteLog>
 		}
 	}
 
+	@Override
+	public List<RouteLog> findRouteLogByDriverId(long id, int offset, int pageSize) {
+		String hql = "from RouteLog r where driverId=? and r.state='wait'";
+		return findByPage(hql, offset, pageSize,id);
+	}
+
+	@Override
+	public long findCountByDriverId(long id) {
+		String hql = "select count(*) from Approve where driverId=?";
+		List<?> l = find(hql,id);
+		if(l!=null&&l.size()==1){
+			return (Long)l.get(0);
+		}
+		return 0;
+	}
+
+	@Override
+	public List<RouteLog> findNewRouteLogByDriverId(long id, int offset,
+			int pageSize) {
+		String hql = "from RouteLog r where driverId=? and r.state='wait'";
+		return findByPage(hql, offset, pageSize,id);
+	}
+
+	@Override
+	public long findNewCountByDriverId(long id) {
+		String hql = "select count(*) from RouteLog r where driverId=? and r.state='wait'";
+		List<?> l = find(hql,id);
+		if(l!=null&&l.size()==1){
+			return (Long)l.get(0);
+		}
+		return 0;
+
+	}
+
+	@Override
+	public RouteLog findPassengerCurrentRoute(long userId) {
+		String hql = "from RouteLog where passengerId=? and state='inprogress'";
+		List<RouteLog> routeLogs = this.find(hql, userId);
+		if(!routeLogs.isEmpty()){
+			return routeLogs.get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public RouteLog findDriverCurrentRoute(long userId) {
+		String hql = "from RouteLog where driverId=? and state='inprogress'";
+		List<RouteLog> routeLogs = this.find(hql, userId);
+		if(!routeLogs.isEmpty()){
+			return routeLogs.get(0);
+		}
+		return null;
+	}
+
+	
 }

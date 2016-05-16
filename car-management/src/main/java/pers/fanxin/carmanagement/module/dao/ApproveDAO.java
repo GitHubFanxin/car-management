@@ -12,4 +12,5 @@ public interface ApproveDAO extends BaseDAO<Approve>{
 	public List<Approve> findApproveByPage(int offset, int pageSize, String condition);
 	public long findCount(String condition);
 	public Approve getApproveById(long id);
+	
 }

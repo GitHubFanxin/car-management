@@ -17,7 +17,7 @@ public class Car {
 	private String carNum;
 	private String carName;
 	private String description;
-	private String state;
+	private String state="free";
 	private Boolean available = Boolean.FALSE;
 	public Long getCarId() {
 		return carId;

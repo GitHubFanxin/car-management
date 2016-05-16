@@ -12,10 +12,12 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import pers.fanxin.carmanagement.module.dao.ApplicationDAO;
 import pers.fanxin.carmanagement.module.dao.ApproveDAO;
 import pers.fanxin.carmanagement.module.dao.CarDAO;
+import pers.fanxin.carmanagement.module.dao.DriverDAO;
 import pers.fanxin.carmanagement.module.dao.RouteLogDAO;
 import pers.fanxin.carmanagement.module.entity.Application;
 import pers.fanxin.carmanagement.module.entity.Approve;
 import pers.fanxin.carmanagement.module.entity.Car;
+import pers.fanxin.carmanagement.module.entity.Driver;
 import pers.fanxin.carmanagement.module.entity.RouteLog;
 
 public class ApplicationDAOTest {
@@ -24,6 +26,7 @@ public class ApplicationDAOTest {
 	CarDAO carDAO = (CarDAO)context.getBean("carDAOImpl");
 	ApproveDAO approveDAO = (ApproveDAO)context.getBean("approveDAOImpl");
 	RouteLogDAO routeLogDAO = (RouteLogDAO)context.getBean("routeLogDAOImpl");
+	DriverDAO driverDAO = (DriverDAO)context.getBean("driverDAO");
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -56,8 +59,8 @@ public class ApplicationDAOTest {
 		approve.setApproveDate(new Date());
 		approve.setApproverId(new Long(1));
 		approve.setApproverName("admin");
-		approve.setDriverName("admin");
-		approve.setDriverId(new Long(1));
+//		approve.setDriverName("admin");
+//		approve.setDriverId(new Long(1));
 		Application application= applicationDAO.getApplicationById(1);
 		application.setState("approved");
 		application.setApprove(approve);
@@ -80,6 +83,11 @@ public class ApplicationDAOTest {
 		application.setState("complete");
 		routeLog.setApplication(application);
 		routeLogDAO.createRouteLog(routeLog);
+	}
+	
+	public void driverDAOTest(){
+		Driver driver = new Driver();
+//		driver.setCurrentRouteLog(currentRouteLog);
 	}
 
 }

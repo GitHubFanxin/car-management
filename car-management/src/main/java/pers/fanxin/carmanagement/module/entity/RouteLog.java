@@ -24,9 +24,18 @@ public class RouteLog {
 	private Long logId;
 	private Date startDate;
 	private Date endDate;
+	private boolean roundtrip;
 	private Double cost;
 	private Long driverId;
 	private String driverName;
+	private Long passengerId;
+	private String passengerName;
+	private String startpoint;
+	private String destination;
+	/**
+	 * wait、 inprogress、complete
+	 */
+	private String state = "wait";
 	@ManyToOne(targetEntity=Car.class)
 	@JoinColumn(name="car_id",nullable=false)
 	private Car car;
@@ -80,5 +89,41 @@ public class RouteLog {
 	}
 	public void setApplication(Application application) {
 		this.application = application;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+	public Long getPassengerId() {
+		return passengerId;
+	}
+	public void setPassengerId(Long passengerId) {
+		this.passengerId = passengerId;
+	}
+	public String getPassengerName() {
+		return passengerName;
+	}
+	public void setPassengerName(String passengerName) {
+		this.passengerName = passengerName;
+	}
+	public String getStartpoint() {
+		return startpoint;
+	}
+	public void setStartpoint(String startpoint) {
+		this.startpoint = startpoint;
+	}
+	public String getDestination() {
+		return destination;
+	}
+	public void setDestination(String destination) {
+		this.destination = destination;
+	}
+	public boolean isRoundtrip() {
+		return roundtrip;
+	}
+	public void setRoundtrip(boolean roundtrip) {
+		this.roundtrip = roundtrip;
 	}
 }

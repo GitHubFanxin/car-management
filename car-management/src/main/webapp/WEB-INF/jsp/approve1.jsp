@@ -107,7 +107,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							class="glyphicon glyphicon-share-alt"></span> 申请用车
 					</a></li>
 				</ul></li>
-			<li><a href="<%=basePath %>driver/mytask"><span
+			<li><a href="<%=basePath %>usecar/mymission"><span
 					class="glyphicon glyphicon-stats"></span> 我的任务 </a></li>
 			<li><a href="<%=basePath %>manage/report"><span
 					class="glyphicon glyphicon-stats"></span> 使用报表 </a></li>
@@ -137,16 +137,62 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">我的申请记录</div>
+					<div class="panel-heading">用车申请管理</div>
 					<div class="panel-body">
 						<div id="toolbar">
-							<button id="bt_add" class="btn btn-default"  onclick="window.location.href('<%=basePath %>usecar/apply">添加</button>
+							<button id="btn_check" class="btn btn-primary" disabled="disabled"
+								data-toggle="modal" data-target="#driverModal">审核</button>
 						</div>
 						<table id="table"></table>
 					</div>
 				</div>
 			</div>
 		</div>
+		
+			<!-- Modal -->
+	<div class="modal fade" id="driverModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">审核 选择司机</h4>
+				</div>
+				<div class="modal-body">
+					<table id="driverTable"></table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" id="driverOk"
+						data-toggle="modal" data-target="#carModal">确认</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="carModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">审核 选择车辆</h4>
+				</div>
+				<div class="modal-body">
+					<table id="carTable"></table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" id="btn_pass">确认</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	</div>
 
@@ -174,7 +220,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				search:true,
 				clickToSelect:true,
 				toolbar:"#toolbar",
-				url: "<%=basePath%>usecar/myapplication/list",
+				url: "<%=basePath%>manage/approve/unapproved-list",
 				sidePagination: 'server',
 				columns: [{
 				checkbox:true
@@ -182,6 +228,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					field: "applicationId",
 					title: "申请编号",
 					sortable: true,
+				},{
+					field: "applicantName",
+					title: "申请人"
 				},{ 
 					field: "startpoint",
 					title: "出发地"
@@ -199,17 +248,134 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					title: "状态"
 				}]
 			});
+			//$('#btn_check').click(pass);
+			$('#btn_check').click(driverTableInit);
+			$('#btn_driverOk').click(carTableInit);
+			$('#btn_driverOk').click(pass);
+			$('#table').on('check.bs.table',function(row,e){
+				$("#bt_pass").attr("disabled",false);
+			});
+			$('#table').on('uncheck.bs.table',function(row,e){
+				$("#bt_pass").attr("disabled",true);
+			});
 		});
-		 function rowStyle(row, index) {
-		        var classes = ['success', 'info', 'warning', 'danger'];
 		
-		        if (index % 2 === 0) {
-		            return {
-		                classes: classes[index / 2 % 4]
-		            };
-		        }
-		        return {};
-		    }
+		$.postJSON = function(url,jsondata,callback){//JSON请求
+			return jQuery.ajax({
+				'type' : 'POST',
+				'url' : url,
+				'contentType' : 'application/json',
+				'data' : JSON.stringify(jsondata),
+				'dataType' : 'json',
+				'success' : callback
+			});
+		};
+		
+		var selectedDriverId;
+		var selectedCarId;
+		
+		function pass(){
+			var rowData = $('#table').bootstrapTable('getSelections');
+			var json = {
+					"applicationId" : rowData[0].applicationId,
+					"driverId" : selectedDriverId,
+					"carId" : selectedCarId
+			}
+			url = "approve/pass";
+			 $.postJSON(url,json,function(result){
+				 $("#driverModal").modal("hide");
+				 $("#carModal").modal("hide");
+					$("#bt_pass").attr("disabled",true);
+				});
+		}
+		
+		function saveDriver(){
+			var rowData = $('#driverTable').bootstrapTable('getSelections');
+			selectedDriverId = rowData[0].driverId;
+		}
+		
+		function saveCar(){
+			var rowData = $('#carTable').bootstrapTable('getSelections');
+			selectedDriverId = rowData[0].carId;
+		}
+		
+		function driverTableInit(){
+			$('#driverTable').bootstrapTable({
+				method:"post",
+				contentType:"application/x-www-form-urlencoded",
+				pagination:true,
+				showToggle:true,
+				showRefresh:true,
+				showColumns:true,
+				singleSelect:true,
+				rowStyle: rowStyle,
+				search:true,
+				clickToSelect:true,
+				url: '<%=basePath%>driver/list',
+				sidePagination: 'server',
+				columns: [{
+				checkbox:true
+				},{ 
+					field: "workNum",
+					title: "工号",
+					sortable: true,
+				},{ 
+					field: "realname",
+					title: "姓名",
+					sortable: true,
+				},{ 
+					field: "state",
+					title: "状态"
+				}]
+			});
+		}
+		
+		function carTableInit(){
+			$('#carTable').bootstrapTable({
+				method:"post",
+				contentType:"application/x-www-form-urlencoded",
+				pagination:true,
+				showToggle:true,
+				showRefresh:true,
+				showColumns:true,
+				singleSelect:true,
+				rowStyle: rowStyle,
+				search:true,
+				clickToSelect:true,
+				url: '<%=basePath%>manage/car/list',
+				sidePagination: 'server',
+				columns: [{
+				checkbox:true
+				},{ 
+					field: "carNum",
+					title: "车辆编号",
+					sortable: true,
+				},{ 
+					field: "carName",
+					title: "车辆名称"
+				},
+				{ 
+					field: "state",
+					title: "车辆状态"
+				},{
+					field: "available",
+					title: "是否可用"
+				}]
+			});
+		}
+		
+		
+		
+		function rowStyle(row, index) {
+	        var classes = ['success', 'info', 'warning', 'danger'];
+	
+	        if (index % 2 === 0 ) {
+	            return {
+	                classes: classes[index/2%4]
+	            };
+	        }
+	        return {};
+	    }
 	</script>
 </body>
 

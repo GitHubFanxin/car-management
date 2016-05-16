@@ -23,8 +23,6 @@ public class Approve {
 	private Date approveDate;
 	private String approverName;
 	private Long approverId;
-	private Long driverId;
-	private String driverName;
 	@OneToOne(targetEntity=Application.class,mappedBy="approve")
 	@Cascade(CascadeType.ALL)
 	private Application application;
@@ -51,18 +49,6 @@ public class Approve {
 	}
 	public void setApproverId(Long approverId) {
 		this.approverId = approverId;
-	}
-	public Long getDriverId() {
-		return driverId;
-	}
-	public void setDriverId(Long driverId) {
-		this.driverId = driverId;
-	}
-	public String getDriverName() {
-		return driverName;
-	}
-	public void setDriverName(String driverName) {
-		this.driverName = driverName;
 	}
 	public Application getApplication() {
 		return application;

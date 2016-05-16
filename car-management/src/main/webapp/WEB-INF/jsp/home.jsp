@@ -107,7 +107,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							class="glyphicon glyphicon-share-alt"></span> 申请用车
 					</a></li>
 				</ul></li>
-			<li><a href="<%=basePath %>usecar/mymission"><span
+			<li><a href="<%=basePath %>driver/mytask"><span
 					class="glyphicon glyphicon-stats"></span> 我的任务 </a></li>
 			<li><a href="<%=basePath %>manage/report"><span
 					class="glyphicon glyphicon-stats"></span> 使用报表 </a></li>
@@ -134,6 +134,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</div>
 		<!--/.row-->
+		
+		<div class="row">
+			<div class="col-md-4">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						当前任务
+					</div>
+					<div class="panel-body">
+						<p id="taskpreview">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="panel-heading dark-overlay"><span class="glyphicon glyphicon-calendar"></span>Calendar</div>
+					<div class="panel-body">
+						<div id="calendar"></div>
+					</div>
+			</div>
+		</div>
 
 	</div>
 
@@ -146,6 +165,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="<%=basePath%>static/js/bootstrap-datepicker.js"></script>
 	<script src="<%=basePath%>static/js/bootstrap-table.js"></script>
 	<script src="<%=basePath%>static/js/custom.js"></script>
+	
+	<script>
+	$(function(){
+		$()
+	});
+	
+	function initCurrentTask(){
+		$.ajax({
+			'type' : 'post',
+			'url' : 'getCurrentTask',
+			'success' : function(result){
+				var taskPreviewHtml = "";
+				taskPreviewHtml = taskPreviewHtml + "<p><b>"+result.startpoint+
+					" --- "+result.destination+"</b></p>";
+				
+				if(result.roundtrip===true){
+					taskPreviewHtml = taskPreviewHtml+"<p>往返</p>";
+				}else{
+					taskPreviewHtml = taskPreviewHtml+"<p>单程</p>";
+				}
+				taskPreviewHtml = taskPreviewHtml+
+					"<p>乘客："+result.passengerName+"</p>"+
+					"<p>"+result.date+"</p>"+
+					"<p>"+result.phone+"</p>";
+				$('#taskpreview').html(taskPreviewHtml);
+			}
+		});
+	}
+	</script>	
 </body>
 
 </html>
