@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class HomeController {
-	@RequestMapping("/index")
+
     public String hello1() {
         SecurityUtils.getSubject().checkRole("admin");
         return "index";
@@ -16,5 +16,9 @@ public class HomeController {
 	@RequestMapping("/home")
 	public String home() {
         return "home";
-    }    
+    } 
+	@RequestMapping("/manage/track")
+	public String track() {
+        return "track";
+    } 
 }

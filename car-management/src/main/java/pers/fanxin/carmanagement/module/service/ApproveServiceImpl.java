@@ -22,9 +22,10 @@ import pers.fanxin.carmanagement.security.dao.RoleDAO;
 import pers.fanxin.carmanagement.security.dao.UserDAO;
 import pers.fanxin.carmanagement.security.entity.Role;
 import pers.fanxin.carmanagement.security.entity.User;
+
 @Service
-public class ApproveServiceImpl implements ApproveService{
-	
+public class ApproveServiceImpl implements ApproveService {
+
 	@Autowired
 	private ApproveDAO approveDAO;
 	@Autowired
@@ -40,12 +41,11 @@ public class ApproveServiceImpl implements ApproveService{
 	@Autowired
 	private DriverDAO driverDAO;
 
-	
-	private User getCurrentUser(){
-		String username = (String)SecurityUtils.getSubject().getPrincipal();
+	private User getCurrentUser() {
+		String username = (String) SecurityUtils.getSubject().getPrincipal();
 		return userDAO.findByName(username);
 	}
-	
+
 	@Override
 	public void updateApprove(Approve approve) {
 		approveDAO.updateApprove(approve);
@@ -75,8 +75,9 @@ public class ApproveServiceImpl implements ApproveService{
 	@Override
 	public Long approve(long ApplicationId) {
 		User currentUser = getCurrentUser();
-		Application application = applicationDAO.getApplicationById(ApplicationId);
-		if(application.getApprove()!=null){
+		Application application = applicationDAO
+				.getApplicationById(ApplicationId);
+		if (application.getApprove() != null) {
 			Approve approve = new Approve();
 			approve.setApplication(application);
 			approve.setApproveDate(new Date());
@@ -89,23 +90,24 @@ public class ApproveServiceImpl implements ApproveService{
 		}
 		return null;
 	}
-	
+
 	@Override
-	public Long approve(long ApplicationId,long carId,long driverId) {
+	public Long approve(long ApplicationId, long carId, long driverId) {
 		User currentUser = getCurrentUser();
-		Application application = applicationDAO.getApplicationById(ApplicationId);
-		if(application.getApprove()==null){//等于null，没有对应的审核表，即未审核
-			//设置审核表信息
+		Application application = applicationDAO
+				.getApplicationById(ApplicationId);
+		if (application.getApprove() == null) {// 等于null，没有对应的审核表，即未审核
+			// 设置审核表信息
 			Approve approve = new Approve();
 			approve.setApplication(application);
 			approve.setApproveDate(new Date());
 			approve.setApproverId(currentUser.getUserId());
 			approve.setApproverName(currentUser.getRealname());
-			//新建行程日志
+			// 新建行程日志
 			RouteLog routeLog = new RouteLog();
 			routeLog.setApplication(application);
 			Car car = carDAO.getCarById(carId);
-			car.setState("wait");//状态改为使用中
+			car.setState("wait");// 状态改为使用中
 			routeLog.setCar(car);
 			Driver driver = driverDAO.getDriverByDriverId(driverId);
 			routeLog.setDriverId(driver.getUserId());
@@ -116,7 +118,7 @@ public class ApproveServiceImpl implements ApproveService{
 			routeLog.setDestination(application.getDestination());
 			routeLog.setRoundtrip(application.isRoundtrip());
 			routeLog.setStartDate(application.getStartDate());
-			
+
 			application.setApprove(approve);
 			application.setRouteLog(routeLog);
 			application.setState("pass");

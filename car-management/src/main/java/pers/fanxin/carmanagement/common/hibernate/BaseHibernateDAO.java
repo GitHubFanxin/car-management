@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class BaseHibernateDAO<T> implements BaseDAO<T> {
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
@@ -22,7 +22,7 @@ public class BaseHibernateDAO<T> implements BaseDAO<T> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public T get(Class<T> entityClazz, Serializable id) {
-		return (T)getSessionFactory().getCurrentSession().get(entityClazz, id);
+		return (T) getSessionFactory().getCurrentSession().get(entityClazz, id);
 	}
 
 	@Override
@@ -45,21 +45,22 @@ public class BaseHibernateDAO<T> implements BaseDAO<T> {
 		getSessionFactory().getCurrentSession().saveOrUpdate(entity);
 		getSessionFactory().getCurrentSession().flush();
 		getSessionFactory().getCurrentSession().clear();
-//		getSessionFactory().getCurrentSession().update(entity);
+		// getSessionFactory().getCurrentSession().update(entity);
 	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> find(String hql, Object... param) {
 		Query query = getSessionFactory().getCurrentSession().createQuery(hql);
-		for(int i=0;i<param.length;i++){
+		for (int i = 0; i < param.length; i++) {
 			query.setParameter(i, param[i]);
 		}
-		return (List<T>)query.list();
+		return (List<T>) query.list();
 	}
 
 	@Override
 	public List<T> findAll(Class<T> entityClazz) {
-		return find("from "+entityClazz.getSimpleName());
+		return find("from " + entityClazz.getSimpleName());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -70,20 +71,21 @@ public class BaseHibernateDAO<T> implements BaseDAO<T> {
 
 	@Override
 	public long findCount(Class<T> entityClazz) {
-		List<?> l = find("select count(*) from "+entityClazz.getSimpleName());
-		if(l!=null&&l.size()==1){
-			return (Long)l.get(0);
+		List<?> l = find("select count(*) from " + entityClazz.getSimpleName());
+		if (l != null && l.size() == 1) {
+			return (Long) l.get(0);
 		}
 		return 0;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	protected List<T> findByPage(String hql,int offset,int pageSize,Object... params){
+	protected List<T> findByPage(String hql, int offset, int pageSize,
+			Object... params) {
 		Query query = getSessionFactory().getCurrentSession().createQuery(hql);
-		for(int i=0;i<params.length;i++){
+		for (int i = 0; i < params.length; i++) {
 			query.setParameter(i, params[i]);
 		}
 		return query.setFirstResult(offset).setMaxResults(pageSize).list();
 	}
-	
+
 }

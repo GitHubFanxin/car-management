@@ -102,6 +102,7 @@ http://www.springframework.org/schema/util/spring-util-4.0.xsd">
         </property>
         <property name="filterChainDefinitions">
             <value>
+            	/androidService = anon
                 /unauthorized.jsp = anon
                 /static/** = anon
                 /login.jsp = authc

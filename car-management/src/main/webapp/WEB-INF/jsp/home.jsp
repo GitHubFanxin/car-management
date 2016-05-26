@@ -35,7 +35,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#"><span>System</span>Admin</a>
+				<a class="navbar-brand" href="#"><span>公车管理</span>平台</a>
 				<ul class="user-menu">
 					<li class="dropdown pull-right"><a href="#"
 						class="dropdown-toggle" data-toggle="dropdown"><span
@@ -126,13 +126,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						class="glyphicon glyphicon-s glyphicon-plus"></em></span>
 			</a>
 				<ul class="children collapse" id="sub-item-4">
-					<li><a class="" href="<%=basePath %>driver/mytask"> <span
+					<li><a class="" href="<%=basePath %>driver/newtask"> <span
 							class="glyphicon glyphicon-share-alt"></span> 新的任务
 					</a></li>
-					<li><a class="" href="#"> <span
+					<li><a class="" href="<%=basePath %>driver/task-history"> <span
 							class="glyphicon glyphicon-share-alt"></span> 我的任务记录
 					</a></li>
 				</ul></li>
+			</shiro:hasAnyRoles>
+			
+			<shiro:hasAnyRoles name="admin">
+			<li><a href="<%=basePath %>manage/track"><span
+					class="glyphicon glyphicon-stats"></span> 行程监控 </a></li>
 			</shiro:hasAnyRoles>
 			
 			<shiro:hasAnyRoles name="admin">
@@ -165,8 +170,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<!--/.row-->
 		
 		<div class="row">
+		<shiro:hasAnyRoles name="driver">
 			<div class="col-md-4">
-				<div class="panel panel-primary">
+				<div class="panel panel-info">
 					<div class="panel-heading">
 						当前任务
 					</div>
@@ -175,6 +181,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 				</div>
 			</div>
+		</shiro:hasAnyRoles>
+		
+		<shiro:hasAnyRoles name="driver">
+			<div class="col-md-4">
+				<div class="panel ">
+					<div class="panel-heading panel-orange">
+						有新的任务
+					</div>
+					<div class="panel-body" id="taskpreview">
+						
+					</div>
+				</div>
+			</div>
+		</shiro:hasAnyRoles>
+		
+		<shiro:hasAnyRoles name="user">
+			<div class="col-md-4">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						当前行程
+					</div>
+					<div class="panel-body" id="routepreview">
+						
+					</div>
+				</div>
+			</div>
+		</shiro:hasAnyRoles>
+		
 			<div class="col-md-4">
 				<div class="panel-heading dark-overlay"><span class="glyphicon glyphicon-calendar"></span>Calendar</div>
 					<div class="panel-body">
@@ -198,6 +232,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script>
 	$(function(){
 		initCurrentTask();
+		initCurrentRoute()
 	});
 	
 	function initCurrentTask(){
@@ -215,10 +250,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					taskPreviewHtml = taskPreviewHtml+"<p>单程</p>";
 				}
 				taskPreviewHtml = taskPreviewHtml+
+					"<p>"+result.carName+" <b>"+result.carNum+"</b></p>"+
 					"<p>乘客：<b>"+result.passengerName+"</b></p>"+
 					"<p>"+result.date+"</p>"+
 					"<p>"+result.passengerPhone+"</p>"+
-					'<button id="btn_complete" class="btn btn-primary btn-md pull-right" >完成</button>';
+					'<div class="input-group">'+
+							'<input id="cost" type="text" class="form-control input-md" placeholder="本次任务费用" />'+
+							'<span class="input-group-btn">'+
+								'<button class="btn btn-primary btn-md" id="btn_complete">完成</button>'+
+							'</span>'+
+					'</div>';
+					//'<button id="btn_complete" class="btn btn-primary btn-md pull-right" >完成</button>';
 				$('#taskpreview').html(taskPreviewHtml);
 				$('#btn_complete').click(completeTask);
 				}else{
@@ -230,9 +272,47 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		});
 	}
 	
-	function completeTask(){
+	function initCurrentRoute(){
 		$.ajax({
 			'type' : 'post',
+			'url' : 'usecar/currentRoute',
+			'success' : function(result){
+				var taskPreviewHtml = "";
+				if(result!=null&&result!=""){
+					taskPreviewHtml = taskPreviewHtml + "<p><b>"+result.startpoint+
+					"</b> --- <b>"+result.destination+"</b></p>";
+				if(result.roundtrip===true){
+					taskPreviewHtml = taskPreviewHtml+"<p>往返</p>";
+				}else{
+					taskPreviewHtml = taskPreviewHtml+"<p>单程</p>";
+				}
+				taskPreviewHtml = taskPreviewHtml+
+					"<p>"+result.carName+" <b>"+result.carNum+"</b></p>"+
+					"<p>司机：<b>"+result.driverName+"</b></p>"+
+					"<p>"+result.date+"</p>"+
+					"<p>"+result.driverPhone+"</p>"
+				$('#routepreview').html(taskPreviewHtml);
+				$('#btn_complete').click(completeTask);
+				}else{
+					taskPreviewHtml = "当前没有任何行程"
+					$('#routepreview').html(taskPreviewHtml);
+				}
+				
+			}
+		});
+	}
+	
+	function completeTask(){
+		var cost = $("#cost").val();
+		var data;
+		if(cost!=""&&cost!=null){
+			data = {"cost": cost};
+		}else{
+			data = {"cost": 0.00};
+		}
+		$.ajax({
+			'type' : 'post',
+			'data' : data,
 			'url' : 'driver/completeTask',
 			'success' : function(result){
 				taskPreviewHtml = "当前没有接受任何任务"

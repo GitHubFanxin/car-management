@@ -13,14 +13,15 @@ import pers.fanxin.carmanagement.module.entity.RouteLog;
 import pers.fanxin.carmanagement.module.vo.CurrentRouteVO;
 import pers.fanxin.carmanagement.security.dao.UserDAO;
 import pers.fanxin.carmanagement.security.entity.User;
+
 @Service
-public class RouteLogServiceImpl implements RouteLogService{
+public class RouteLogServiceImpl implements RouteLogService {
 
 	@Autowired
 	private RouteLogDAO routeLogDAO;
 	@Autowired
 	private UserDAO userDAO;
-	
+
 	@Override
 	public Long createRouteLog(RouteLog routeLog) {
 		return routeLogDAO.createRouteLog(routeLog);
@@ -47,37 +48,44 @@ public class RouteLogServiceImpl implements RouteLogService{
 		return routeLogDAO.findRouteLogsByPage(offset, pageSize, condition);
 	}
 
-	private User getCurrentUser(){
-		String username = (String)SecurityUtils.getSubject().getPrincipal();
+	private User getCurrentUser() {
+		String username = (String) SecurityUtils.getSubject().getPrincipal();
 		return userDAO.findByName(username);
 	}
-	
+
 	@Override
 	public CurrentRouteVO findPassengerCurrentRoute() {
 		CurrentRouteVO currentRoute = new CurrentRouteVO();
 		User passenger = getCurrentUser();
-		RouteLog routelog = routeLogDAO.findPassengerCurrentRoute(passenger.getUserId());
-		User driverUser = userDAO.getUserById(routelog.getPassengerId());
-		currentRoute.setRouteId(routelog.getLogId());
-		currentRoute.setPassengerName(passenger.getRealname());
-		currentRoute.setRoundtrip(routelog.isRoundtrip());
-		currentRoute.setPassengerPhone(passenger.getPhone());
-		currentRoute.setDriverName(driverUser.getRealname());
-		currentRoute.setDriverPhone(driverUser.getPhone());
-		currentRoute.setDestination(routelog.getDestination());
-		currentRoute.setStartpoint(routelog.getStartpoint());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-		if(routelog.getStartDate()!=null)
-			currentRoute.setDate(sdf.format(routelog.getStartDate()));
-		return currentRoute;
+		RouteLog routelog = routeLogDAO.findPassengerCurrentRoute(passenger
+				.getUserId());
+		if (routelog != null) {
+			User driverUser = userDAO.getUserById(routelog.getDriverId());
+			currentRoute.setRouteId(routelog.getLogId());
+			currentRoute.setPassengerName(passenger.getRealname());
+			currentRoute.setRoundtrip(routelog.isRoundtrip());
+			currentRoute.setPassengerPhone(passenger.getPhone());
+			currentRoute.setDriverName(driverUser.getRealname());
+			currentRoute.setDriverPhone(driverUser.getPhone());
+			currentRoute.setDestination(routelog.getDestination());
+			currentRoute.setStartpoint(routelog.getStartpoint());
+			currentRoute.setCarNum(routelog.getCar().getCarNum());
+			currentRoute.setCarName(routelog.getCar().getCarName());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+			if (routelog.getStartDate() != null)
+				currentRoute.setDate(sdf.format(routelog.getStartDate()));
+			return currentRoute;
+		}
+		return null;
 	}
 
 	@Override
 	public CurrentRouteVO findDriverCurrentRoute() {
 		CurrentRouteVO currentRoute = new CurrentRouteVO();
-		User driverUser =  getCurrentUser();
-		RouteLog routelog = routeLogDAO.findDriverCurrentRoute(driverUser.getUserId());
-		if(routelog!=null){
+		User driverUser = getCurrentUser();
+		RouteLog routelog = routeLogDAO.findDriverCurrentRoute(driverUser
+				.getUserId());
+		if (routelog != null) {
 			User passenger = userDAO.getUserById(routelog.getPassengerId());
 			currentRoute.setRouteId(routelog.getLogId());
 			currentRoute.setPassengerName(passenger.getRealname());
@@ -87,8 +95,10 @@ public class RouteLogServiceImpl implements RouteLogService{
 			currentRoute.setDriverPhone(driverUser.getPhone());
 			currentRoute.setDestination(routelog.getDestination());
 			currentRoute.setStartpoint(routelog.getStartpoint());
+			currentRoute.setCarNum(routelog.getCar().getCarNum());
+			currentRoute.setCarName(routelog.getCar().getCarName());
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-			if(routelog.getStartDate()!=null)
+			if (routelog.getStartDate() != null)
 				currentRoute.setDate(sdf.format(routelog.getStartDate()));
 			return currentRoute;
 		}
@@ -96,28 +106,28 @@ public class RouteLogServiceImpl implements RouteLogService{
 	}
 
 	@Override
-	public List<RouteLog> findCurrentDriverRouteLog(int offset,
-			int pageSize) {
-		User driverUser =  getCurrentUser();
-		return routeLogDAO.findRouteLogByDriverId(driverUser.getUserId(), offset, pageSize);
+	public List<RouteLog> findCurrentDriverRouteLog(int offset, int pageSize) {
+		User driverUser = getCurrentUser();
+		return routeLogDAO.findRouteLogByDriverId(driverUser.getUserId(),
+				offset, pageSize);
 	}
 
 	@Override
 	public long findCurrentDriverRouteLogCount() {
-		User driverUser =  getCurrentUser();
+		User driverUser = getCurrentUser();
 		return routeLogDAO.findCountByDriverId(driverUser.getUserId());
 	}
 
 	@Override
-	public List<RouteLog> findCurrentPassengerRouteLog(int offset,
-			int pageSize) {
-		User passengerUser =  getCurrentUser();
-		return routeLogDAO.findRouteLogByPassengerId(passengerUser.getUserId(), offset, pageSize);
+	public List<RouteLog> findCurrentPassengerRouteLog(int offset, int pageSize) {
+		User passengerUser = getCurrentUser();
+		return routeLogDAO.findRouteLogByPassengerId(passengerUser.getUserId(),
+				offset, pageSize);
 	}
 
 	@Override
 	public long findCurrentPassengerRouteLogCount() {
-		User passengerUser =  getCurrentUser();
+		User passengerUser = getCurrentUser();
 		return routeLogDAO.findCountByPassengerId(passengerUser.getUserId());
 	}
 }

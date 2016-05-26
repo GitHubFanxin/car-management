@@ -15,7 +15,7 @@ import pers.fanxin.carmanagement.security.dao.UserDAO;
 import pers.fanxin.carmanagement.security.entity.User;
 
 @Service
-public class DriverServiceImpl implements DriverService{
+public class DriverServiceImpl implements DriverService {
 
 	@Autowired
 	private DriverDAO driverDAO;
@@ -23,7 +23,7 @@ public class DriverServiceImpl implements DriverService{
 	private UserDAO userDAO;
 	@Autowired
 	private RouteLogDAO routeLogDAO;
-	
+
 	@Override
 	public Long createDriver(Driver driver) {
 		return driverDAO.createDriver(driver);
@@ -62,9 +62,10 @@ public class DriverServiceImpl implements DriverService{
 
 	@Override
 	public void driveAccept(long routeLogId) {
-		Driver driver = driverDAO.getDriverByUserId(getCurrentUser().getUserId());
-		
-		if(routeLogDAO.findDriverCurrentRoute(driver.getUserId())==null){
+		Driver driver = driverDAO.getDriverByUserId(getCurrentUser()
+				.getUserId());
+
+		if (routeLogDAO.findDriverCurrentRoute(driver.getUserId()) == null) {
 			RouteLog routeLog = routeLogDAO.getRouteLogById(routeLogId);
 			routeLog.setState("inprogress");
 			driver.setState("working");
@@ -74,8 +75,10 @@ public class DriverServiceImpl implements DriverService{
 
 	@Override
 	public void driveEnd(double cost) {
-		Driver driver = driverDAO.getDriverByUserId(getCurrentUser().getUserId());
-		RouteLog routeLog = routeLogDAO.findDriverCurrentRoute(driver.getUserId());
+		Driver driver = driverDAO.getDriverByUserId(getCurrentUser()
+				.getUserId());
+		RouteLog routeLog = routeLogDAO.findDriverCurrentRoute(driver
+				.getUserId());
 		routeLog.setState("completed");
 		routeLog.setCost(cost);
 		routeLog.setEndDate(new Date());
@@ -84,15 +87,16 @@ public class DriverServiceImpl implements DriverService{
 		driverDAO.update(driver);
 	}
 
-	private User getCurrentUser(){
-		String username = (String)SecurityUtils.getSubject().getPrincipal();
+	private User getCurrentUser() {
+		String username = (String) SecurityUtils.getSubject().getPrincipal();
 		return userDAO.findByName(username);
 	}
 
 	@Override
 	public List<RouteLog> findNewTask(int offset, int pageSize) {
 		User driver = getCurrentUser();
-		return routeLogDAO.findNewRouteLogByDriverId(driver.getUserId(), offset, pageSize);
+		return routeLogDAO.findNewRouteLogByDriverId(driver.getUserId(),
+				offset, pageSize);
 	}
 
 	@Override
@@ -104,7 +108,8 @@ public class DriverServiceImpl implements DriverService{
 	@Override
 	public List<RouteLog> findTask(int offset, int pageSize) {
 		User driver = getCurrentUser();
-		return routeLogDAO.findRouteLogByDriverId(driver.getUserId(), offset, pageSize);
+		return routeLogDAO.findRouteLogByDriverId(driver.getUserId(), offset,
+				pageSize);
 	}
 
 	@Override

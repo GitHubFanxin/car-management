@@ -126,10 +126,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						class="glyphicon glyphicon-s glyphicon-plus"></em></span>
 			</a>
 				<ul class="children collapse" id="sub-item-4">
-					<li><a class="" href="<%=basePath %>driver/mytask"> <span
+					<li><a class="" href="<%=basePath %>driver/newtask"> <span
 							class="glyphicon glyphicon-share-alt"></span> 新的任务
 					</a></li>
-					<li><a class="" href="#"> <span
+					<li><a class="" href="<%=basePath %>driver/task-history"> <span
 							class="glyphicon glyphicon-share-alt"></span> 我的任务记录
 					</a></li>
 				</ul></li>
@@ -209,6 +209,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<div class="form-group">
 						<input type="text" class="form-control" id="description"
 							placeholder="角色描述">
+					</div>
+					<div class="form-group">
+						<div id="permission-tree" class=""></div>
 					</div>					
 				</div>
 				<div class="modal-footer">
@@ -246,6 +249,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	<script src="<%=basePath%>static/js/bootstrap-datepicker.js"></script>
 	<script src="<%=basePath%>static/js/bootstrap-table.js"></script>
+	<script src="<%=basePath%>static/js/bootstrap-treeview.min.js"></script>
 	<script src="<%=basePath%>static/js/custom.js"></script>
 	<script>
 	
@@ -311,6 +315,17 @@ $.postJSON = function(url,jsondata,callback){//JSON请求
 
 function save() {
 		var saveUrl;
+		
+		var selected = $("#permission-tree").treeview('getChecked');
+		var permissions = "";
+		for(var i=0;i<selected.length;i++){
+			if(i>0){
+				permissions = permissions+","+selected[i].permission;
+			}else{
+				permissions = selected[i].permission;
+			}
+		}
+		
 		if(isEdit){
 			saveUrl="role/edit";
 			var rowData = $('#table').bootstrapTable('getSelections');
@@ -318,12 +333,14 @@ function save() {
 					"roleId":rowData[0].roleId,
 		            "roleName": $("#roleName").val(),
 		            "description": $("#description").val(),
+		            "permissions" : permissions
 		        };
 		}else{
 			saveUrl="role/add";
 			var dataJson = {
 		            "roleName": $("#roleName").val(),
 		            "description": $("#description").val(),
+		            "permissions" : permissions
 		        };
 		}
         $.postJSON(saveUrl,dataJson,function(result){
@@ -339,6 +356,7 @@ function save() {
 		$("#myModalLabel").text("新增");
 		$("#roleName").val("");
 		$("#description").val("");
+		treeinit(-1);
 	}
 	
 	function deleterole(){
@@ -359,9 +377,28 @@ function save() {
 		$("#myModalLabel").text("编辑");
 		isEdit=true;
 		var rowData = $('#table').bootstrapTable('getSelections');
+		treeinit(rowData[0].roleId);
 		$("#roleName").val(rowData[0].roleName);
 		$("#description").val(rowData[0].description);
 	}
+	
+	function treeinit(roleId){
+		var url = "role/permissiontree"
+		var dataJson = {
+	            "roleId": roleId,
+	     };
+		$.postJSON(url,dataJson,function(result){
+			$("#permission-tree").treeview({
+				data:result,
+				showIcon:false,
+				showCheckbox:true
+			});
+		});
+		
+	}
+	
+	
+	
 						    function rowStyle(row, index) {
 						        var classes = ['success', 'info', 'warning', 'danger'];
 						

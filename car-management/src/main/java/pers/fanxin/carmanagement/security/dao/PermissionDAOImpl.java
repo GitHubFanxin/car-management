@@ -8,7 +8,8 @@ import pers.fanxin.carmanagement.common.hibernate.BaseHibernateDAO;
 import pers.fanxin.carmanagement.security.entity.Permission;
 
 @Repository
-public class PermissionDAOImpl extends BaseHibernateDAO<Permission> implements PermissionDAO{
+public class PermissionDAOImpl extends BaseHibernateDAO<Permission> implements
+		PermissionDAO {
 
 	@Override
 	public Long createPermission(Permission permission) {
@@ -28,9 +29,10 @@ public class PermissionDAOImpl extends BaseHibernateDAO<Permission> implements P
 
 	@Override
 	public Permission getPermissionById(Long id) {
-		String hql="from "+Permission.class.getSimpleName()+" where permissionId=?";
+		String hql = "from " + Permission.class.getSimpleName()
+				+ " where permissionId=?";
 		List<Permission> permissions = this.find(hql, id);
-		if(!permissions.isEmpty()){
+		if (!permissions.isEmpty()) {
 			return permissions.get(0);
 		}
 		return null;
@@ -39,6 +41,16 @@ public class PermissionDAOImpl extends BaseHibernateDAO<Permission> implements P
 	@Override
 	public List<Permission> getAllPermissions() {
 		return this.findAll(Permission.class);
+	}
+
+	@Override
+	public Permission findPermissionByName(String permissionName) {
+		String hql = "from Permission where permissionName=?";
+		List<Permission> permissions = this.find(hql, permissionName);
+		if (!permissions.isEmpty()) {
+			return permissions.get(0);
+		}
+		return null;
 	}
 
 }

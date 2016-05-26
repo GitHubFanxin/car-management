@@ -26,27 +26,28 @@ import pers.fanxin.carmanagement.module.vo.ApplicationVO;
 @Controller
 @RequestMapping("/usecar")
 public class ApplicationController {
-	
+
 	@Autowired
 	private ApplicationService applicationService;
-	
+
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	
+
 	@Autowired
 	private CarService carService;
-	
-	@RequestMapping(value = "/apply",method = RequestMethod.GET)
-	String applicationForm(){
+
+	@RequestMapping(value = "/apply", method = RequestMethod.GET)
+	String applicationForm() {
 		return "application_form";
 	}
-	
+
 	@RequestMapping("/myapplication")
-	String applicationPage(){
+	String applicationPage() {
 		return "application";
 	}
-	
-	@RequestMapping(value = "/apply",method = RequestMethod.POST)
-	public Object carAdd(String startpoint, String destination, boolean roundtrip, String remark, String date){
+
+	@RequestMapping(value = "/apply", method = RequestMethod.POST)
+	public Object carAdd(String startpoint, String destination,
+			boolean roundtrip, String remark, String date) {
 		Application application = new Application();
 		application.setStartpoint(startpoint);
 		application.setDestination(destination);
@@ -58,27 +59,27 @@ public class ApplicationController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(applicationService.createApplication(application)>0){
+		if (applicationService.createApplication(application) > 0) {
 			return "redirect:myapplication";
 		}
 		return "application";
 	}
-	
-	
-	
+
 	@RequestMapping("/myapplication/list")
 	@ResponseBody
-	public Object applicationListHistory(HttpServletRequest request, int limit, int offset, String search){
-		List<Application> applications = applicationService.findCurrentUserHistory(offset, limit, search);
+	public Object applicationListHistory(HttpServletRequest request, int limit,
+			int offset, String search) {
+		List<Application> applications = applicationService
+				.findCurrentUserHistory(offset, limit, search);
 		List<Object> results = new ArrayList<Object>();
-		for (Application application : applications){
-//			Map<String,Object> result = new HashMap<String,Object>();
-//			result.put("applicationId", application.getApplicantId());
-//			result.put("destination", application.getDestination());
-//			result.put("startpoint", application.getStartpoint());
-//			result.put("roundtrip", application.getRouteLog());
-//			result.put("applyDate", sdf.format(application.getApplyDate()));
-//			result.put("state", application.getState());
+		for (Application application : applications) {
+			// Map<String,Object> result = new HashMap<String,Object>();
+			// result.put("applicationId", application.getApplicantId());
+			// result.put("destination", application.getDestination());
+			// result.put("startpoint", application.getStartpoint());
+			// result.put("roundtrip", application.getRouteLog());
+			// result.put("applyDate", sdf.format(application.getApplyDate()));
+			// result.put("state", application.getState());
 			ApplicationVO result = new ApplicationVO(application);
 			results.add(result);
 		}
@@ -87,10 +88,10 @@ public class ApplicationController {
 		page.setTotal(applicationService.findCount(search));
 		return page;
 	}
-	
+
 	@RequestMapping("/myapplication/delete")
 	@ResponseBody
-	public Object carDelete(@RequestBody Application application){
+	public Object carDelete(@RequestBody Application application) {
 		applicationService.deleteApplication(application);
 		return "{'state':true}";
 	}

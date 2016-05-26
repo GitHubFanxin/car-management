@@ -7,11 +7,13 @@ import org.springframework.stereotype.Service;
 
 import pers.fanxin.carmanagement.module.dao.CarDAO;
 import pers.fanxin.carmanagement.module.entity.Car;
+
 @Service
-public class CarServiceImpl implements CarService{
+public class CarServiceImpl implements CarService {
 
 	@Autowired
 	private CarDAO carDAO;
+
 	@Override
 	public Long createCar(Car car) {
 		return carDAO.createCar(car);

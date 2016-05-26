@@ -126,10 +126,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						class="glyphicon glyphicon-s glyphicon-plus"></em></span>
 			</a>
 				<ul class="children collapse" id="sub-item-4">
-					<li><a class="" href="<%=basePath %>driver/mytask"> <span
+					<li><a class="" href="<%=basePath %>driver/newtask"> <span
 							class="glyphicon glyphicon-share-alt"></span> 新的任务
 					</a></li>
-					<li><a class="" href="#"> <span
+					<li><a class="" href="<%=basePath %>driver/task-history"> <span
 							class="glyphicon glyphicon-share-alt"></span> 我的任务记录
 					</a></li>
 				</ul></li>
@@ -170,7 +170,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<div class="panel-heading">我的申请记录</div>
 					<div class="panel-body">
 						<div id="toolbar">
-							<button id="bt_add" class="btn btn-default"  onclick="window.location.href('<%=basePath %>usecar/apply">添加</button>
+							<button class="btn btn-default"  onclick="javascript:window.location.replace('<%=basePath %>usecar/apply')">添加</button>
 						</div>
 						<table id="table"></table>
 					</div>

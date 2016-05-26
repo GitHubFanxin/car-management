@@ -9,19 +9,24 @@ import pers.fanxin.carmanagement.common.hibernate.BaseHibernateDAO;
 import pers.fanxin.carmanagement.security.entity.Role;
 
 @Repository
-public class RoleDAOImpl extends BaseHibernateDAO<Role> implements RoleDAO{
+public class RoleDAOImpl extends BaseHibernateDAO<Role> implements RoleDAO {
 
 	@Override
 	public Long createRole(Role role) {
-		return (Long)this.save(role);
+		return (Long) this.save(role);
 	}
 
 	@Override
 	public void deleteRole(Long id) {
-		SQLQuery query = this.getSessionFactory().getCurrentSession().createSQLQuery("delete from role_permission where role_permission.role_id=?");
+		SQLQuery query = this
+				.getSessionFactory()
+				.getCurrentSession()
+				.createSQLQuery(
+						"delete from role_permission where role_permission.role_id=?");
 		query.setParameter(0, id);
 		query.executeUpdate();
-		query = this.getSessionFactory().getCurrentSession().createSQLQuery("delete from t_role where role_id=?");
+		query = this.getSessionFactory().getCurrentSession()
+				.createSQLQuery("delete from t_role where role_id=?");
 		query.setParameter(0, id);
 		query.executeUpdate();
 	}
@@ -33,9 +38,9 @@ public class RoleDAOImpl extends BaseHibernateDAO<Role> implements RoleDAO{
 
 	@Override
 	public Role getRoleById(Long id) {
-		String hql = "from "+Role.class.getSimpleName()+" where roleId=?";
+		String hql = "from " + Role.class.getSimpleName() + " where roleId=?";
 		List<Role> roles = this.find(hql, id);
-		if(!roles.isEmpty()){
+		if (!roles.isEmpty()) {
 			return roles.get(0);
 		}
 		return null;
@@ -49,37 +54,40 @@ public class RoleDAOImpl extends BaseHibernateDAO<Role> implements RoleDAO{
 	@Override
 	public List<Role> findRoleByPage(int offset, int pageSize, String condition) {
 		String hql;
-		if(condition==null||condition==""){
-			hql = "from "+Role.class.getSimpleName();
+		if (condition == null || condition == "") {
+			hql = "from " + Role.class.getSimpleName();
 			return findByPage(hql, offset, pageSize);
-		}else{
-			hql = "from "+Role.class.getSimpleName()+" where roleName like ? or description like ?";
-			return findByPage(hql, offset, pageSize, "%"+condition+"%","%"+condition+"%");
+		} else {
+			hql = "from " + Role.class.getSimpleName()
+					+ " where roleName like ? or description like ?";
+			return findByPage(hql, offset, pageSize, "%" + condition + "%", "%"
+					+ condition + "%");
 		}
 	}
 
 	@Override
 	public long findCount(String condition) {
 		String hql;
-		List<?> l ;
-		if(condition==null||condition==""){
-			hql = "select count(*) from "+Role.class.getSimpleName();
+		List<?> l;
+		if (condition == null || condition == "") {
+			hql = "select count(*) from " + Role.class.getSimpleName();
 			l = find(hql);
-		}else{
-			hql = "select count(*) from "+Role.class.getSimpleName()+" where roleName like ? or description like ?";
-			l = find(hql,"%"+condition+"%","%"+condition+"%");
+		} else {
+			hql = "select count(*) from " + Role.class.getSimpleName()
+					+ " where roleName like ? or description like ?";
+			l = find(hql, "%" + condition + "%", "%" + condition + "%");
 		}
-		if(l!=null&&l.size()==1){
-			return (Long)l.get(0);
+		if (l != null && l.size() == 1) {
+			return (Long) l.get(0);
 		}
 		return 0;
 	}
 
 	@Override
 	public Role getRoleByName(String roleName) {
-		String hql = "from "+Role.class.getSimpleName()+" where roleName=?";
+		String hql = "from " + Role.class.getSimpleName() + " where roleName=?";
 		List<Role> roles = this.find(hql, roleName);
-		if(!roles.isEmpty()){
+		if (!roles.isEmpty()) {
 			return roles.get(0);
 		}
 		return null;

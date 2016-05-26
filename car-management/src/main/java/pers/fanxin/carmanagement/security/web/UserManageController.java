@@ -26,7 +26,6 @@ import pers.fanxin.carmanagement.security.service.UserService;
 import pers.fanxin.carmanagement.security.utils.UserHelper;
 import pers.fanxin.carmanagement.security.vo.UserVO;
 
-
 @Controller
 @RequestMapping("/basedata")
 public class UserManageController {
@@ -34,20 +33,21 @@ public class UserManageController {
 	private UserService userService;
 	@Autowired
 	private RoleService roleService;
-	
+
 	@RequestMapping("/user")
-	public String roleManage(){
-		 SecurityUtils.getSubject().checkRole("admin");
+	public String roleManage() {
+		SecurityUtils.getSubject().checkRole("admin");
 		return "user_manage";
 	}
-	
+
 	@RequestMapping("/user/list")
 	@ResponseBody
-	public Object userList(HttpServletRequest request,int limit,int offset,String search){
+	public Object userList(HttpServletRequest request, int limit, int offset,
+			String search) {
 		List<User> users = userService.findUserByPage(offset, limit, search);
 		List<Object> results = new ArrayList<Object>();
-		for(User user:users){
-			Map<String,Object> result = new HashMap<String,Object>();
+		for (User user : users) {
+			Map<String, Object> result = new HashMap<String, Object>();
 			result.put("userId", user.getUserId());
 			result.put("workNum", user.getWorkNum());
 			result.put("payNum", user.getPayNum());
@@ -63,47 +63,48 @@ public class UserManageController {
 		page.setTotal(userService.findCount(search));
 		return page;
 	}
-	
+
 	@RequestMapping("/user/add")
 	@ResponseBody
-	public Object userAdd(HttpServletRequest request,@RequestBody UserVO userVO){
+	public Object userAdd(HttpServletRequest request, @RequestBody UserVO userVO) {
 		userService.createUser(userVO);
 		return "fail";
 	}
-	
+
 	@RequestMapping("/user/edit")
 	@ResponseBody
-	public Object roleEdit(@RequestBody UserVO userVO){
+	public Object roleEdit(@RequestBody UserVO userVO) {
 		userService.updateUser(userVO);
 		return "{'state':true}";
 	}
-	
+
 	@RequestMapping("/user/delete")
 	@ResponseBody
-	public Object roleDelete(@RequestBody UserVO userVO){
+	public Object roleDelete(@RequestBody UserVO userVO) {
 		userService.deleteUser(userVO.getUserId());
 		return "{'state':true}";
 	}
-	
+
 	@RequestMapping("/user/roletree")
 	@ResponseBody
-	public Object roleTree(@RequestBody UserVO userVO){
+	public Object roleTree(@RequestBody UserVO userVO) {
 		Set<Role> curRoles;
-		if(userVO.getUserId()>0){
+		if (userVO.getUserId() > 0) {
 			curRoles = userService.findUserById(userVO.getUserId()).getRole();
-		}else{
+		} else {
 			curRoles = new HashSet<Role>();
 		}
 		List<Role> allRoles = roleService.getAllRoles();
 		List<Object> nodes = new ArrayList<Object>();
 		List<Object> tree = new ArrayList<Object>();
-		Map<String,Object> root = new HashMap<String,Object>();
-		Map<String,Boolean> checked = new HashMap<String,Boolean>();
+		Map<String, Object> root = new HashMap<String, Object>();
+		Map<String, Boolean> checked = new HashMap<String, Boolean>();
 		checked.put("checked", true);
-		for (Role role : allRoles){
-			Map<String,Object> node = new HashMap<String,Object>();
-			node.put("text", role.getRoleName());
-			if(curRoles.contains(role)){
+		for (Role role : allRoles) {
+			Map<String, Object> node = new HashMap<String, Object>();
+			node.put("roleName", role.getRoleName());
+			node.put("text", role.getDescription());
+			if (curRoles.contains(role)) {
 				node.put("state", checked);
 			}
 			nodes.add(node);

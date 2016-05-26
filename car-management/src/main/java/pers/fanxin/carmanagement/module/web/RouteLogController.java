@@ -21,23 +21,31 @@ import pers.fanxin.carmanagement.module.vo.RouteLogVO;
 public class RouteLogController {
 	@Autowired
 	private RouteLogService routeLogService;
-	
+
 	@RequestMapping("/usecar/history")
-	String applicationPage(){
-		return "MyUseHistory";
+	String applicationPage() {
+		return "myUseHistory";
 	}
-	
+
 	@RequestMapping("/usecar/history/list")
 	@ResponseBody
-	public Object applicationListHistory(HttpServletRequest request, int limit, int offset, String search){
-		List<RouteLog> routeLogs = routeLogService.findCurrentPassengerRouteLog(offset, limit);
+	public Object applicationListHistory(HttpServletRequest request, int limit,
+			int offset, String search) {
+		List<RouteLog> routeLogs = routeLogService
+				.findCurrentPassengerRouteLog(offset, limit);
 		List<Object> results = new ArrayList<Object>();
-		for (RouteLog routeLog : routeLogs){
+		for (RouteLog routeLog : routeLogs) {
 			results.add(new RouteLogVO(routeLog));
 		}
 		Page page = new Page();
 		page.setRows(results);
 		page.setTotal(routeLogService.findCurrentPassengerRouteLogCount());
 		return page;
+	}
+
+	@RequestMapping("/usecar/currentRoute")
+	@ResponseBody
+	public Object currentRoute() {
+		return routeLogService.findPassengerCurrentRoute();
 	}
 }

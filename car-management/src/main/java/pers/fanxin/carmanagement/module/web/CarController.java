@@ -21,30 +21,31 @@ import pers.fanxin.carmanagement.module.service.CarService;
 @Controller
 @RequestMapping("/manage")
 public class CarController {
-	
+
 	@Autowired
 	private CarService carService;
-	
+
 	@RequestMapping("/car")
-	String carPage(){
-		SecurityUtils.getSubject().checkRole("driver");
+	String carPage() {
+		SecurityUtils.getSubject().checkRole("approver");
 		return "car_manage";
 	}
-	
+
 	@RequestMapping("/car/list")
 	@ResponseBody
-	public Object carList(HttpServletRequest request, int limit, int offset, String search){
+	public Object carList(HttpServletRequest request, int limit, int offset,
+			String search) {
 		List<Car> cars = carService.findCarsByPage(offset, limit, search);
 		List<Object> results = new ArrayList<Object>();
-		for(Car car:cars){
-			Map<String,Object> result = new HashMap<String,Object>();
+		for (Car car : cars) {
+			Map<String, Object> result = new HashMap<String, Object>();
 			result.put("carId", car.getCarId());
 			result.put("carNum", car.getCarNum());
 			result.put("carName", car.getCarName());
 			result.put("state", car.getState());
-			if(car.getAvailable()){
+			if (car.getAvailable()) {
 				result.put("available", "已启用");
-			}else{
+			} else {
 				result.put("available", "已禁用");
 			}
 			result.put("description", car.getDescription());
@@ -55,33 +56,33 @@ public class CarController {
 		page.setTotal(carService.findCount(search));
 		return page;
 	}
-	
+
 	@RequestMapping("/car/add")
 	@ResponseBody
-	public Object carAdd(@RequestBody Car car){
-		if(carService.createCar(car)>0){
+	public Object carAdd(@RequestBody Car car) {
+		if (carService.createCar(car) > 0) {
 			return "{'state':true}";
 		}
 		return "{'state':false,'errMsg':'添加车辆失败'}";
 	}
-	
+
 	@RequestMapping("/car/edit")
 	@ResponseBody
-	public Object carEdit(@RequestBody Car car){
+	public Object carEdit(@RequestBody Car car) {
 		carService.updateCar(car);
 		return "{'state':true}";
 	}
-	
+
 	@RequestMapping("/car/delete")
 	@ResponseBody
-	public Object carDelete(@RequestBody Car car){
+	public Object carDelete(@RequestBody Car car) {
 		carService.deleteCar(car);
 		return "{'state':true}";
 	}
-	
+
 	@RequestMapping("/car/forbid")
 	@ResponseBody
-	public Object carForbid(@RequestBody Car car){
+	public Object carForbid(@RequestBody Car car) {
 		Car newCar = carService.getCarById(car.getCarId());
 		newCar.setAvailable(!newCar.getAvailable());
 		carService.updateCar(newCar);

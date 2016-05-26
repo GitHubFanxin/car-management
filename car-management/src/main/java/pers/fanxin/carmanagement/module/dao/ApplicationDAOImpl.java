@@ -6,13 +6,14 @@ import org.springframework.stereotype.Repository;
 
 import pers.fanxin.carmanagement.common.hibernate.BaseHibernateDAO;
 import pers.fanxin.carmanagement.module.entity.Application;
+
 @Repository
-public class ApplicationDAOImpl extends BaseHibernateDAO<Application> 
-	implements ApplicationDAO{
+public class ApplicationDAOImpl extends BaseHibernateDAO<Application> implements
+		ApplicationDAO {
 
 	@Override
 	public Long createApplication(Application application) {
-		return (Long)save(application);
+		return (Long) save(application);
 	}
 
 	@Override
@@ -27,9 +28,10 @@ public class ApplicationDAOImpl extends BaseHibernateDAO<Application>
 
 	@Override
 	public Application getApplicationById(long id) {
-		String hql = "from "+Application.class.getSimpleName()+" where applicationId=?";
+		String hql = "from " + Application.class.getSimpleName()
+				+ " where applicationId=?";
 		List<Application> applications = this.find(hql, id);
-		if(!applications.isEmpty()){
+		if (!applications.isEmpty()) {
 			return applications.get(0);
 		}
 		return null;
@@ -39,12 +41,13 @@ public class ApplicationDAOImpl extends BaseHibernateDAO<Application>
 	public List<Application> findApplicationsByPage(int offset, int pageSize,
 			String condition) {
 		String hql;
-		if(condition==""||condition==null){
-			hql = "from "+Application.class.getSimpleName();
+		if (condition == "" || condition == null) {
+			hql = "from " + Application.class.getSimpleName();
 			return findByPage(hql, offset, pageSize);
-		}else{
-			hql = "from "+Application.class.getSimpleName()+" where applicantName like ?";
-			return findByPage(hql, offset, pageSize, "%"+condition+"%");
+		} else {
+			hql = "from " + Application.class.getSimpleName()
+					+ " where applicantName like ?";
+			return findByPage(hql, offset, pageSize, "%" + condition + "%");
 		}
 	}
 
@@ -52,15 +55,15 @@ public class ApplicationDAOImpl extends BaseHibernateDAO<Application>
 	public long findCount(String condition) {
 		String hql;
 		List<?> l;
-		if(condition==""||condition==null){
+		if (condition == "" || condition == null) {
 			hql = "select count(*) from Application";
 			l = find(hql);
-		}else{
+		} else {
 			hql = "select count(*) from Application where applicantName like ?";
-			l = find(hql,"%"+condition+"%");
+			l = find(hql, "%" + condition + "%");
 		}
-		if(l!=null&&l.size()==1){
-			return (Long)l.get(0);
+		if (l != null && l.size() == 1) {
+			return (Long) l.get(0);
 		}
 		return 0;
 	}
@@ -69,28 +72,29 @@ public class ApplicationDAOImpl extends BaseHibernateDAO<Application>
 	public List<Application> findApplicationsByUserId(int offset, int pageSize,
 			String condition, long userId) {
 		String hql;
-		if(condition==""||condition==null){
+		if (condition == "" || condition == null) {
 			hql = "from Application where applicantId = ?";
 			return findByPage(hql, offset, pageSize, userId);
-		}else{
+		} else {
 			hql = "from Application where applicantId = ? and (destination like ? or startpoint like ?)";
-			return findByPage(hql, offset, pageSize,userId, "%"+condition+"%", "%"+condition+"%");
+			return findByPage(hql, offset, pageSize, userId, "%" + condition
+					+ "%", "%" + condition + "%");
 		}
 	}
 
 	@Override
-	public long findCountByUserId(String condition,long userId) {
+	public long findCountByUserId(String condition, long userId) {
 		String hql;
 		List<?> l;
-		if(condition==""||condition==null){
+		if (condition == "" || condition == null) {
 			hql = "select count(*) from Application where applicantId = ?";
-			l = find(hql,userId);
-		}else{
+			l = find(hql, userId);
+		} else {
 			hql = "select count(*) from Application where applicantId = ? and (destination like ? or startpoint like ?)";
-			l = find(hql,userId,"%"+condition+"%","%"+condition+"%");
+			l = find(hql, userId, "%" + condition + "%", "%" + condition + "%");
 		}
-		if(l!=null&&l.size()==1){
-			return (Long)l.get(0);
+		if (l != null && l.size() == 1) {
+			return (Long) l.get(0);
 		}
 		return 0;
 	}
@@ -99,13 +103,14 @@ public class ApplicationDAOImpl extends BaseHibernateDAO<Application>
 	public List<Application> findApplicationsByUserName(int offset,
 			int pageSize, String condition, String username) {
 		String hql;
-		if(condition==""||condition==null){
+		if (condition == "" || condition == null) {
 			hql = "from Application where applicantName = ?";
 			return findByPage(hql, offset, pageSize, username);
-		}else{
+		} else {
 			hql = "from Application "
-					+" where applicantName = ? and (destination like ? or startpoint like ?)";
-			return findByPage(hql, offset, pageSize, username,"%"+condition+"%","%"+condition+"%");
+					+ " where applicantName = ? and (destination like ? or startpoint like ?)";
+			return findByPage(hql, offset, pageSize, username, "%" + condition
+					+ "%", "%" + condition + "%");
 		}
 	}
 
@@ -113,15 +118,16 @@ public class ApplicationDAOImpl extends BaseHibernateDAO<Application>
 	public long findCountByUsername(String condition, String username) {
 		String hql;
 		List<?> l;
-		if(condition==""||condition==null){
+		if (condition == "" || condition == null) {
 			hql = "select count(*) from Application where applicantName = ?";
-			l = find(hql,username);
-		}else{
+			l = find(hql, username);
+		} else {
 			hql = "select count(*) from Application where applicantName = ? and (destination like ? or startpoint like ?)";
-			l = find(hql,username,"%"+condition+"%","%"+condition+"%");
+			l = find(hql, username, "%" + condition + "%", "%" + condition
+					+ "%");
 		}
-		if(l!=null&&l.size()==1){
-			return (Long)l.get(0);
+		if (l != null && l.size() == 1) {
+			return (Long) l.get(0);
 		}
 		return 0;
 	}
@@ -130,13 +136,13 @@ public class ApplicationDAOImpl extends BaseHibernateDAO<Application>
 	public List<Application> applicationsUnapproved(int offset, int pageSize,
 			String condition) {
 		String hql;
-		if(condition==""||condition==null){
+		if (condition == "" || condition == null) {
 			hql = "from Application where state = 'unapproved'";
 			return findByPage(hql, offset, pageSize);
-		}else{
+		} else {
 			hql = "from Application "
-					+" where state = 'unapproved' and applicantName like ?";
-			return findByPage(hql, offset, pageSize, "%"+condition+"%");
+					+ " where state = 'unapproved' and applicantName like ?";
+			return findByPage(hql, offset, pageSize, "%" + condition + "%");
 		}
 	}
 
@@ -144,15 +150,15 @@ public class ApplicationDAOImpl extends BaseHibernateDAO<Application>
 	public long findUnapprovedCount(String condition) {
 		String hql;
 		List<?> l;
-		if(condition==""||condition==null){
+		if (condition == "" || condition == null) {
 			hql = "select count(*) from Application where state = 'unapproved'";
 			l = find(hql);
-		}else{
+		} else {
 			hql = "select count(*) from Application where state = 'unapproved' and  (applicantName like ?)";
-			l = find(hql,"%"+condition+"%");
+			l = find(hql, "%" + condition + "%");
 		}
-		if(l!=null&&l.size()==1){
-			return (Long)l.get(0);
+		if (l != null && l.size() == 1) {
+			return (Long) l.get(0);
 		}
 		return 0;
 	}

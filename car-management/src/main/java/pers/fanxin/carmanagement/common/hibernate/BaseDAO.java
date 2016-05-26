@@ -8,22 +8,23 @@ public interface BaseDAO<T> {
 	 * @Description:根据id加载实体
 	 * @param clazz
 	 * @param id
-	 * @return
-	 * T
+	 * @return T
 	 */
 	T get(Class<T> entityClazz, Serializable id);
+
 	/**
 	 * @Description:保存实体
 	 * @param entity
-	 * @return
-	 * Serializable
+	 * @return Serializable
 	 */
 	Serializable save(T entity);
+
 	/**
 	 * @Description:删除实体
 	 * @param entity
 	 */
-	 void delete(T entity);
+	void delete(T entity);
+
 	/**
 	 * @Description: 更新实体
 	 * @param entity
@@ -33,6 +34,7 @@ public interface BaseDAO<T> {
 	 * @date: 2016年3月16日
 	 */
 	void update(T entity);
+
 	/**
 	 * 
 	 * @Description: 带占位的hql查询
@@ -45,6 +47,7 @@ public interface BaseDAO<T> {
 	 * @date: 2016年3月16日
 	 */
 	List<T> find(String hql, Object... param);
+
 	/**
 	 * 
 	 * @Description: 查找所有实体
@@ -56,6 +59,8 @@ public interface BaseDAO<T> {
 	 * @date: 2016年3月16日
 	 */
 	List<T> findAll(Class<T> entityClazz);
+
 	List<T> find(String hql);
+
 	long findCount(Class<T> entityClazz);
 }

@@ -18,12 +18,12 @@ import pers.fanxin.carmanagement.security.utils.UserHelper;
 import pers.fanxin.carmanagement.security.vo.UserVO;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDAO userDAO;
 	@Autowired
 	private RoleDAO roleDAO;
-	
+
 	@Autowired
 	private DriverDAO driverDAO;
 
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public Long  createUser(String username, String realname, String workNum, 
+	public Long createUser(String username, String realname, String workNum,
 			String payNum, String email, String password, String roleId) {
 		User user = new User();
 		user.setUsername(username);
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService{
 		user.setPassword(password);
 		String[] roleIds = roleId.split(",");
 		Set<Role> roles = new HashSet<Role>();
-		for(String id : roleIds){
+		for (String id : roleIds) {
 			Role role = roleDAO.getRoleById(Long.parseLong(id));
 			roles.add(role);
 		}
@@ -69,26 +69,27 @@ public class UserServiceImpl implements UserService{
 		user.setPhone(userVO.getPhone());
 		user.setPayNum(userVO.getPayNum());
 		user.setEmail(userVO.getEmail());
-		
+
 		String RoleString = userVO.getRoles();
 		String[] roleNames = RoleString.split(",");
-		
+
 		Set<Role> roles = new HashSet<Role>();
-		for(String roleName : roleNames){
+		for (String roleName : roleNames) {
 			Role role = roleDAO.getRoleByName(roleName);
 			roles.add(role);
 		}
-		
-		if(!roles.isEmpty()){
+
+		if (!roles.isEmpty()) {
 			user.setRole(roles);
-		}else{
+		} else {
 			user.setRole(null);
 		}
 		userDAO.updateUser(user);
-		if(!RoleString.contains("driver")){
+		if (!RoleString.contains("driver")) {
 			unbindDriver(user);
 		}
-		if(RoleString.contains("driver") && (!formerRoleString.contains("driver"))){
+		if (RoleString.contains("driver")
+				&& (!formerRoleString.contains("driver"))) {
 			bindDriver(user);
 		}
 	}
@@ -133,27 +134,28 @@ public class UserServiceImpl implements UserService{
 		String[] roleNames = roleString.split(",");
 		String formerRoleString = UserHelper.getUserRole(user);
 		Set<Role> roles = new HashSet<Role>();
-		for(String roleName : roleNames){
+		for (String roleName : roleNames) {
 			Role role = roleDAO.getRoleByName(roleName);
 			roles.add(role);
 		}
 		user.setRole(roles);
 		Long id = createUser(user);
-		if(roleString.contains("driver")&& (!formerRoleString.contains("driver"))){
-			bindDriver(user);//绑定用户到driver
+		if (roleString.contains("driver")
+				&& (!formerRoleString.contains("driver"))) {
+			bindDriver(user);// 绑定用户到driver
 		}
 		return id;
 	}
-	
-	private void bindDriver(User user){
+
+	private void bindDriver(User user) {
 		Driver driver = new Driver();
 		driver.setRealname(user.getRealname());
 		driver.setUserId(user.getUserId());
 		driver.setWorkNum(user.getWorkNum());
 		driverDAO.createDriver(driver);
 	}
-	
-	private void unbindDriver(User user){
+
+	private void unbindDriver(User user) {
 		driverDAO.deleteDriverByUserId(user.getUserId());
 	}
 }
