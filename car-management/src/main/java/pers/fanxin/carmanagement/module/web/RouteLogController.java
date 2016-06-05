@@ -22,12 +22,8 @@ public class RouteLogController {
 	@Autowired
 	private RouteLogService routeLogService;
 
-	@RequestMapping("/usecar/history")
-	String applicationPage() {
-		return "myUseHistory";
-	}
 
-	@RequestMapping("/usecar/history/list")
+	@RequestMapping("usecar/history/list")
 	@ResponseBody
 	public Object applicationListHistory(HttpServletRequest request, int limit,
 			int offset, String search) {
@@ -43,7 +39,7 @@ public class RouteLogController {
 		return page;
 	}
 
-	@RequestMapping("/usecar/currentRoute")
+	@RequestMapping("user/currentRoute")
 	@ResponseBody
 	public Object currentRoute() {
 		return routeLogService.findPassengerCurrentRoute();

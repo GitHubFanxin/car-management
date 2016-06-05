@@ -28,7 +28,6 @@ import pers.fanxin.carmanagement.security.vo.RoleVO;
 import pers.fanxin.carmanagement.security.vo.UserVO;
 
 @Controller
-@RequestMapping("/basedata")
 @RequiresRoles("admin")
 public class RoleManageController {
 
@@ -37,12 +36,6 @@ public class RoleManageController {
 	@Autowired
 	private PermissionService permissionService;
 
-	@RequiresRoles("admin")
-	@RequestMapping("/role")
-	public String roleManage() {
-		SecurityUtils.getSubject().checkRole("admin");
-		return "role_manage";
-	}
 
 	@RequestMapping("/role/list")
 	@ResponseBody

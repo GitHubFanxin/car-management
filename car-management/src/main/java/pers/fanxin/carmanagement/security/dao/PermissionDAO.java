@@ -50,5 +50,5 @@ public interface PermissionDAO extends BaseDAO<Permission> {
 	 */
 	List<Permission> getAllPermissions();
 	
-	public Permission findPermissionByName(String permissionName);
+	public Permission findPermissionByName(String permission);
 }

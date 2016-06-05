@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
+<%@taglib prefix="check" tagdir="/WEB-INF/tags" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -65,89 +66,110 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<ul class="nav menu">
 			<li><a href="<%=basePath %>home"><span
 					class="glyphicon glyphicon-dashboard"></span> 主面板</a></li>
-			<shiro:hasAnyRoles name="admin">
+					
+			<check:hasAnyPermissions name="visit:user,visit:role">
 			<li class="parent"><a data-toggle="collapse" href="#sub-item-1">
 					<span class="glyphicon glyphicon-th"></span> 系统管理 <span
 					class="icon pull-right"><em
 						class="glyphicon glyphicon-s glyphicon-plus"></em></span>
 			</a>
 				<ul class="children collapse" id="sub-item-1">
-					<li><a class="" href="<%=basePath %>basedata/user"> <span
+				<shiro:hasPermission name="visit:user">
+					<li><a class="" href="user-manage"> <span
 							class="glyphicon glyphicon-share-alt"></span> 用户管理
 					</a></li>
-					<li><a class="" href="<%=basePath %>basedata/role"> <span
+				</shiro:hasPermission>
+				<shiro:hasPermission name="visit:role">
+					<li><a class="" href="role-manage"> <span
 							class="glyphicon glyphicon-share-alt"></span> 角色管理
 					</a></li>
+				</shiro:hasPermission>
 				</ul></li>
-			</shiro:hasAnyRoles>
+			</check:hasAnyPermissions>
 			
-			<shiro:hasAnyRoles name="admin,approver">
+			<check:hasAnyPermissions name="visit:approve,visit:car,visit:driver">
 			<li class="parent"><a data-toggle="collapse" href="#sub-item-2">
 					<span class="glyphicon glyphicon-pencil"></span> 公车管理 <span
 					class="icon pull-right"><em
 						class="glyphicon glyphicon-s glyphicon-plus"></em></span>
 			</a>
 				<ul class="children collapse" id="sub-item-2">
-					<li><a class="" href="<%=basePath %>manage/approve"> <span
+				<shiro:hasPermission name="visit:approve">
+					<li><a class="" href="approve"> <span
 							class="glyphicon glyphicon-share-alt"></span> 用车审核
 					</a></li>
-					<li><a class="" href="<%=basePath %>manage/car"> <span
+				</shiro:hasPermission>
+				<shiro:hasPermission name="visit:car">
+					<li><a class="" href="car-manage"> <span
 							class="glyphicon glyphicon-share-alt"></span> 车辆管理
 					</a></li>
-					<li><a class="" href="<%=basePath %>manage/driver"> <span
+				</shiro:hasPermission>
+				<shiro:hasPermission name="visit:driver">
+					<li><a class="" href="driver-manage"> <span
 							class="glyphicon glyphicon-share-alt"></span> 司机管理
 					</a></li>
+				</shiro:hasPermission>
 				</ul></li>
-			</shiro:hasAnyRoles>
+			</check:hasAnyPermissions>
 			
-			<shiro:hasAnyRoles name="user">
+			<check:hasAnyPermissions name="visit:apply,visit:myapplication,visit:history">
 			<li class="parent"><a data-toggle="collapse" href="#sub-item-3">
 					<span class="glyphicon glyphicon-info-sign"></span> 公车使用 <span
 					class="icon pull-right"><em
 						class="glyphicon glyphicon-s glyphicon-plus"></em></span>
 			</a>
 				<ul class="children collapse" id="sub-item-3">
-					<li><a class="" href="<%=basePath %>usecar/apply"> <span
+				<shiro:hasPermission name="visit:apply">
+					<li><a class="" href="application-form"> <span
 							class="glyphicon glyphicon-share-alt"></span> 申请用车
 					</a></li>
-					<li><a class="" href="<%=basePath %>usecar/myapplication"> <span
+				</shiro:hasPermission>
+				<shiro:hasPermission name="visit:myapplication">
+					<li><a class="" href="myapplication"> <span
 							class="glyphicon glyphicon-share-alt"></span> 我的申请记录
 					</a></li>
-					<li><a class="" href="<%=basePath %>usecar/history"> <span
+				</shiro:hasPermission>
+				<shiro:hasPermission name="visit:history">
+					<li><a class="" href="myUseHistory"> <span
 							class="glyphicon glyphicon-share-alt"></span> 我的用车记录
 					</a></li>
 				</ul></li>
-			</shiro:hasAnyRoles>
+				</shiro:hasPermission>
+			</check:hasAnyPermissions>
 				
-			<shiro:hasAnyRoles name="driver">
+			<check:hasAnyPermissions name="visit:newtask,visit:taskhistory">
 			<li class="parent"><a data-toggle="collapse" href="#sub-item-4">
 					<span class="glyphicon glyphicon-info-sign"></span> 我的任务<span
 					class="icon pull-right"><em
 						class="glyphicon glyphicon-s glyphicon-plus"></em></span>
 			</a>
 				<ul class="children collapse" id="sub-item-4">
-					<li><a class="" href="<%=basePath %>driver/newtask"> <span
+				<shiro:hasPermission name="visit:newtask">
+					<li><a class="" href="mynewtask"> <span
 							class="glyphicon glyphicon-share-alt"></span> 新的任务
 					</a></li>
-					<li><a class="" href="<%=basePath %>driver/task-history"> <span
+				</shiro:hasPermission>
+				<shiro:hasPermission name="visit:taskhistory">
+					<li><a class="" href="mytaskhistory"> <span
 							class="glyphicon glyphicon-share-alt"></span> 我的任务记录
 					</a></li>
+				</shiro:hasPermission>
 				</ul></li>
-			</shiro:hasAnyRoles>
+			</check:hasAnyPermissions>
 			
-			<shiro:hasAnyRoles name="admin">
-			<li><a href="<%=basePath %>manage/track"><span
+			<shiro:hasPermission name="visit:track">
+			<li><a href="track"><span
 					class="glyphicon glyphicon-stats"></span> 行程监控 </a></li>
-			</shiro:hasAnyRoles>
+			</shiro:hasPermission>
 			
-			<shiro:hasAnyRoles name="admin">
-			<li><a href="<%=basePath %>manage/report"><span
+			<shiro:hasPermission name="visit:report">
+			<li><a href="report"><span
 					class="glyphicon glyphicon-stats"></span> 使用报表 </a></li>
-			</shiro:hasAnyRoles>
+			</shiro:hasPermission>
 			
 			<li role="presentation" class="divider"></li>
 			
-			<li><a href="<%=basePath %>basedata/setting"><span
+			<li><a href="setting"><span
 					class="glyphicon glyphicon-user"></span> 设置 </a></li>
 		</ul>
 	</div>
@@ -183,18 +205,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</shiro:hasAnyRoles>
 		
-		<shiro:hasAnyRoles name="driver">
-			<div class="col-md-4">
-				<div class="panel ">
-					<div class="panel-heading panel-orange">
-						有新的任务
-					</div>
-					<div class="panel-body" id="taskpreview">
-						
-					</div>
-				</div>
-			</div>
-		</shiro:hasAnyRoles>
+
 		
 		<shiro:hasAnyRoles name="user">
 			<div class="col-md-4">
@@ -209,14 +220,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</shiro:hasAnyRoles>
 		
-			<div class="col-md-4">
-				<div class="panel-heading dark-overlay"><span class="glyphicon glyphicon-calendar"></span>Calendar</div>
-					<div class="panel-body">
-						<div id="calendar"></div>
-					</div>
-			</div>
-		</div>
-
 	</div>
 
 	<script src="<%=basePath%>static/js/jquery-1.11.1.min.js"></script>
@@ -275,7 +278,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function initCurrentRoute(){
 		$.ajax({
 			'type' : 'post',
-			'url' : 'usecar/currentRoute',
+			'url' : 'user/currentRoute',
 			'success' : function(result){
 				var taskPreviewHtml = "";
 				if(result!=null&&result!=""){

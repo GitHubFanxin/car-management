@@ -44,9 +44,9 @@ public class PermissionDAOImpl extends BaseHibernateDAO<Permission> implements
 	}
 
 	@Override
-	public Permission findPermissionByName(String permissionName) {
-		String hql = "from Permission where permissionName=?";
-		List<Permission> permissions = this.find(hql, permissionName);
+	public Permission findPermissionByName(String permission) {
+		String hql = "from Permission where permission=?";
+		List<Permission> permissions = this.find(hql, permission);
 		if (!permissions.isEmpty()) {
 			return permissions.get(0);
 		}

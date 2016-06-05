@@ -23,18 +23,12 @@ import pers.fanxin.carmanagement.module.vo.ApplicationVO;
 import pers.fanxin.carmanagement.module.vo.PassMsgVO;
 
 @Controller
-@RequestMapping("/manage")
+//@RequestMapping("/manage")
 public class ApproveController {
 	@Autowired
 	private ApproveService approveService;
 	@Autowired
 	private ApplicationService applicationService;
-
-	@RequestMapping("/approve")
-	String approvePage() {
-		SecurityUtils.getSubject().checkRole("approver");
-		return "approve";
-	}
 
 	@RequestMapping("/approve/list")
 	@ResponseBody

@@ -19,17 +19,11 @@ import pers.fanxin.carmanagement.module.entity.Car;
 import pers.fanxin.carmanagement.module.service.CarService;
 
 @Controller
-@RequestMapping("/manage")
+//@RequestMapping("/manage")
 public class CarController {
 
 	@Autowired
 	private CarService carService;
-
-	@RequestMapping("/car")
-	String carPage() {
-		SecurityUtils.getSubject().checkRole("approver");
-		return "car_manage";
-	}
 
 	@RequestMapping("/car/list")
 	@ResponseBody

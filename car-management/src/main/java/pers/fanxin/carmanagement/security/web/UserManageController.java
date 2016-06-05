@@ -27,18 +27,12 @@ import pers.fanxin.carmanagement.security.utils.UserHelper;
 import pers.fanxin.carmanagement.security.vo.UserVO;
 
 @Controller
-@RequestMapping("/basedata")
 public class UserManageController {
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private RoleService roleService;
 
-	@RequestMapping("/user")
-	public String roleManage() {
-		SecurityUtils.getSubject().checkRole("admin");
-		return "user_manage";
-	}
 
 	@RequestMapping("/user/list")
 	@ResponseBody

@@ -45,7 +45,6 @@ public class BaseHibernateDAO<T> implements BaseDAO<T> {
 		getSessionFactory().getCurrentSession().saveOrUpdate(entity);
 		getSessionFactory().getCurrentSession().flush();
 		getSessionFactory().getCurrentSession().clear();
-		// getSessionFactory().getCurrentSession().update(entity);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -87,5 +86,4 @@ public class BaseHibernateDAO<T> implements BaseDAO<T> {
 		}
 		return query.setFirstResult(offset).setMaxResults(pageSize).list();
 	}
-
 }

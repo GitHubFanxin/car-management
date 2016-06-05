@@ -28,31 +28,7 @@ public class DriverController {
 	@Autowired
 	private RouteLogService routeLogService;
 
-	@RequestMapping("/manage/driver")
-	String carPage() {
-		SecurityUtils.getSubject().checkRole("approver");
-		return "driver_manage";
-	}
-
-	@RequestMapping("/driver/newtask")
-	String taskPage() {
-		SecurityUtils.getSubject().checkRole("driver");
-		return "myNewTask";
-	}
-
-	@RequestMapping("/driver/task-history")
-	String taskHistory() {
-		SecurityUtils.getSubject().checkRole("driver");
-		return "myTaskHistory";
-	}
-
-	@RequestMapping("/driver/currentTask")
-	String currentTaskPage() {
-		SecurityUtils.getSubject().checkRole("driver");
-		return "currentTask";
-	}
-
-	@RequestMapping("/manage/driver/list")
+	@RequestMapping("/driver/list")
 	@ResponseBody
 	public Object driverList(HttpServletRequest request, int limit, int offset,
 			String search) {

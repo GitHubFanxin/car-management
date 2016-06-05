@@ -10,8 +10,8 @@
 	http://www.springframework.org/schema/context 
 	http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 	<!--扫描包-->
-	<context:component-scan base-package="pers.fanxin.carmanagement.*" />
 
+	<context:component-scan base-package="pers.fanxin.carmanagement.*" />
 <bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">  
     <property name="supportedMediaTypes">  
         <list>  

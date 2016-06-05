@@ -24,7 +24,6 @@ import pers.fanxin.carmanagement.module.service.CarService;
 import pers.fanxin.carmanagement.module.vo.ApplicationVO;
 
 @Controller
-@RequestMapping("/usecar")
 public class ApplicationController {
 
 	@Autowired
@@ -35,17 +34,7 @@ public class ApplicationController {
 	@Autowired
 	private CarService carService;
 
-	@RequestMapping(value = "/apply", method = RequestMethod.GET)
-	String applicationForm() {
-		return "application_form";
-	}
-
-	@RequestMapping("/myapplication")
-	String applicationPage() {
-		return "application";
-	}
-
-	@RequestMapping(value = "/apply", method = RequestMethod.POST)
+	@RequestMapping(value = "/application-form", method = RequestMethod.POST)
 	public Object carAdd(String startpoint, String destination,
 			boolean roundtrip, String remark, String date) {
 		Application application = new Application();
