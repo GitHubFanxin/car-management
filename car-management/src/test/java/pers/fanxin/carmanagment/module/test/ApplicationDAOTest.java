@@ -2,7 +2,12 @@ package pers.fanxin.carmanagment.module.test;
 
 import static org.junit.Assert.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +31,7 @@ public class ApplicationDAOTest {
 	CarDAO carDAO = (CarDAO)context.getBean("carDAOImpl");
 	ApproveDAO approveDAO = (ApproveDAO)context.getBean("approveDAOImpl");
 	RouteLogDAO routeLogDAO = (RouteLogDAO)context.getBean("routeLogDAOImpl");
-	DriverDAO driverDAO = (DriverDAO)context.getBean("driverDAO");
+	DriverDAO driverDAO = (DriverDAO)context.getBean("driverDAOImpl");
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -68,7 +73,7 @@ public class ApplicationDAOTest {
 		approveDAO.save(approve);
 	}
 	
-	@Test
+	//@Test
 	public void routeLogDAOTest(){
 		RouteLog routeLog= new RouteLog();
 		routeLog.setApplication(applicationDAO.getApplicationById(1));
@@ -90,4 +95,12 @@ public class ApplicationDAOTest {
 //		driver.setCurrentRouteLog(currentRouteLog);
 	}
 
+	@Test
+	public void dateTest() throws ParseException{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		List<RouteLog> l = routeLogDAO.findRouteLogBetweenDate(sdf.parse("2016-05-15"),sdf.parse("2016-05-17"));
+		RouteLog r = l.get(0);
+		double c = routeLogDAO.findCostBetweenDate(sdf.parse("2016-05-15"),sdf.parse("2016-05-17"));
+		Assert.assertTrue(false);
+	}
 }

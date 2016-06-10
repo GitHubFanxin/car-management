@@ -1,10 +1,13 @@
 package pers.fanxin.carmanagement.module.dao;
 
+import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import pers.fanxin.carmanagement.common.hibernate.BaseHibernateDAO;
+import pers.fanxin.carmanagement.common.utils.DateUtil;
 import pers.fanxin.carmanagement.module.entity.RouteLog;
 
 @Repository
@@ -123,4 +126,76 @@ public class RouteLogDAOImpl extends BaseHibernateDAO<RouteLog> implements
 		return 0;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public long findCountBetweenDate(Date start, Date end) {
+//		String hql = "select count(*) from RouteLog where endDate <=? and endDate >=?";
+//		Query query = getSessionFactory().getCurrentSession().createQuery(hql);
+//		query.setDate(0,DateUtil.strToDate(start));
+//		query.setDate(1,DateUtil.strToDate(end));
+//		List<?> l= query.list();
+//		if (l != null && l.size() == 1) {
+//			return (Long) l.get(0);
+//		}
+//		return 0;
+		String hql = "select count(*) from RouteLog where endDate between ? and ?";
+		Query query = getSessionFactory().getCurrentSession().createQuery(hql);
+		query.setParameter(0, start);
+		query.setParameter(1, end);
+		List<Long> l = query.list();
+		if (l != null && l.size() == 1) {
+			return (Long) l.get(0);
+		}
+		return 0;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public double findCostBetweenDate(Date start, Date end) {
+//		String hql = "select sum(r.cost) from RouteLog as r where r.endDate <=? and r.endDate >=?";
+//		Query query = getSessionFactory().getCurrentSession().createQuery(hql);
+//		query.setDate(0,DateUtil.strToDate(start));
+//		query.setDate(1,DateUtil.strToDate(end));
+//		List<?> l= query.list();
+//		if (l != null && l.size() == 1) {
+//			return (Long) l.get(0);
+//		}
+//		return 0;
+		String hql = "select sum(r.cost) from RouteLog as r where endDate between ? and ?";
+		Query query = getSessionFactory().getCurrentSession().createQuery(hql);
+		query.setParameter(0, start);
+		query.setParameter(1, end);
+		List<Double> l = query.list();
+		if (l != null && l.size() == 1) {
+			return l.get(0);
+		}
+		return 0;
+	}
+
+	@Override
+	public List<RouteLog> findRouteLogBetweenDate(Date start, Date end) {
+//		String hql = "from RouteLog where endDate <=? and endDate >=?";
+//		Query query = getSessionFactory().getCurrentSession().createQuery(hql);
+//		query.setDate(0,DateUtil.strToDate(start));
+//		query.setDate(1,DateUtil.strToDate(end));
+//		List<RouteLog> l= query.list();
+//		return l;
+		String hql = "from RouteLog where endDate between ? and ?";
+		return find(hql, start, end);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public double findCostByDate(Date day) {
+		String hql = "select sum(r.cost) from RouteLog as r where endDate between ? and ?";
+		Query query = getSessionFactory().getCurrentSession().createQuery(hql);
+		query.setParameter(0, day);
+		query.setParameter(1, DateUtil.getDateEnd(day));
+		List<Double> l = query.list();
+		if (l != null && l.size() == 1&& l.get(0)!=null) {
+			return l.get(0);
+		}
+		return 0;
+	}
+	
 }

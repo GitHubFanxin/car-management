@@ -18,6 +18,13 @@ public class PageController {
 		SecurityUtils.getSubject().checkPermission("visit:track");
         return "track";
     } 
+	
+	@RequestMapping("/report")
+	public String report() {
+//		SecurityUtils.getSubject().checkPermission("visit:track");
+        return "report";
+    } 
+	
 	@RequestMapping("/user-manage")
 	public String usermanage(){
 		SecurityUtils.getSubject().checkPermission("visit:user");

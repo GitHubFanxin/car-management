@@ -1,5 +1,6 @@
 package pers.fanxin.carmanagement.module.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import pers.fanxin.carmanagement.common.hibernate.BaseDAO;
@@ -77,4 +78,12 @@ public interface RouteLogDAO extends BaseDAO<RouteLog> {
 	 * @return Approve
 	 */
 	public long findCountByPassengerId(long id);
+	
+	public List<RouteLog> findRouteLogBetweenDate(Date start, Date end);
+	
+	public long findCountBetweenDate(Date start, Date end);
+	
+	public double findCostBetweenDate(Date start, Date end);
+	
+	public double findCostByDate(Date day);
 }
